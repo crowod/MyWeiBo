@@ -123,3 +123,5 @@ AUTHENTICATION_BACKENDS = (
     'weibo.backends.LoginBackends',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+AUTH_USER_MODEL = 'weibo.User'
