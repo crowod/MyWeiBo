@@ -21,5 +21,5 @@ from weibo import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index_view),
-    path('/entrance', views.landing_view),
+    path('entrance', views.landing_view),
 ]

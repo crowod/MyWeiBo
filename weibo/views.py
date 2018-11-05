@@ -7,10 +7,10 @@ from weibo.models import User
 
 
 def index_view(request):
-    if request.user.is_authenticated:
-        return redirect('/me')
-    else:
-        return redirect('/entrance')
+    # if request.user.is_authenticated:
+    #     return redirect('/entrance')
+    # else:
+    return redirect('/entrance')
 
 
 def landing_view(request):
@@ -21,7 +21,7 @@ def landing_view(request):
                 email = rf.cleaned_data['email_sign_up']
                 username = rf.cleaned_data['username_sign_up']
                 password = rf.cleaned_data['password_sign_up']
-                user = User.objects.create(username=username, email=email, password=password)
+                user = User.objects.create_user(email=email, password=password, username=username)
                 user.save()
             else:
                 lf = LoginForm()
