@@ -63,6 +63,7 @@ class RegisterForm(forms.Form):
         return cleaned_data
 
 
+user = None
 class ProfileForm(forms.Form):
     email_profile = forms.EmailField(required=True,
                                      widget=forms.TextInput(attrs={'class': 'password_input',
@@ -90,10 +91,10 @@ class ProfileForm(forms.Form):
 
     def clean_password_profile_old(self):
         password_old = self.cleaned_data['password_profile_old']
-        # here
-        # check whether the old password is correct.
-        # raise forms.ValidationError('invalid password.')
-        return password_old
+        if password_old != User.objects.get(username=user.username).password:
+            raise forms.ValidationError('invalid password.')
+        else:
+            return password_old
 
     def clean_password_profile_new(self):
         password_new = self.cleaned_data['password_profile_new']
