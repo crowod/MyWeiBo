@@ -29,7 +29,7 @@ def landing_view(request):
                 password = rf.cleaned_data['password_sign_up']
                 user = User.objects.create_user(email=email, password=password, username=username)
                 user.save()
-                redirect('/')
+                return redirect('/')
             else:
                 lf = LoginForm()
                 return render(request, 'entrance.html', {'lf': lf, 'rf': rf, 'status': 1})
