@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Profile</title>
+        <link rel="stylesheet" href="/static/bulma/css/profile.css">
+        <link rel="stylesheet" href="/static/bulma/css/reset.css">
+    </head>
+    <body>
+        <div class="head_style">
+            <div class="div_logout">
+                <form action="/logout" method="post" id="logoutForm">
+                    {% csrf_token %}
+                    <button type="submit" form="logoutForm" id="button_logout" name="logout">Log out</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="main_frame" class="center">
+            <div class="div_main_content">
+                <div class="div_fixed_frame">
+                    <div class="center">
+                        {% if success_msg %}
+                            <label style="color: blue; margin-bottom: 1em" class="label_font">{{ success_msg }}</label>
+                        {% endif %}
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <label class="label_font">Username:
+                            <label style="color: blue" class="label_font">{{ username }}</label>
+                        </label>
+                        {{ profile_form.email_profile }}
+                            {% if error.email_profile.0 %}
+                                <span class="error_msg">{{ error.email_profile.0 }}</span>
+                            {% endif %}
+                        {{ profile_form.password_profile_old }}
+                            {% if error.password_profile_old.0 %}
+                                <span class="error_msg">{{ error.password_profile_old.0 }}</span>
+                            {% endif %}
+                        {{ profile_form.password_profile_new }}
+                            {% if error.password_profile_new.0 %}
+                                <span class="error_msg">{{ error.password_profile_new.0 }}</span>
+                            {% endif %}
+                        {{ profile_form.password_cfm_profile_new }}
+                            {% if error.password_cfm_profile_new.0 %}
+                                <span class="error_msg">{{ error.password_cfm_profile_new.0 }}</span>
+                            {% endif %}
+                        <button type="submit" class="bn_submit" name="bn_submit">Submit</button>
+                </form>
+                </div>
+            </div>
+
+        </div>
+
+    </body>
+</html>
