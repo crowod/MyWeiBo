@@ -44,7 +44,7 @@ class RegisterForm(forms.Form):
         usrname = self.cleaned_data['username_sign_up']
         have_name = User.objects.filter(username=usrname).count()
         if have_name:
-            raise forms.ValidationError('email already taken.')
+            raise forms.ValidationError('username already taken.')
         return usrname
 
     def clean_password_sign_up(self):
@@ -55,10 +55,11 @@ class RegisterForm(forms.Form):
 
     def clean(self):
         cleaned_data = self.cleaned_data
-        password = cleaned_data['password_sign_up']
-        password_cfm = cleaned_data['password_cfm_sign_up']
-        if password != password_cfm:
-            raise forms.ValidationError('password mismatch.')
+        if 'password_sign_up' in cleaned_data and 'password_cfm_sign_up' in cleaned_data:
+            password = cleaned_data['password_sign_up']
+            password_cfm = cleaned_data['password_cfm_sign_up']
+            if password != password_cfm:
+                raise forms.ValidationError('password mismatch.')
         return cleaned_data
 
 
@@ -67,7 +68,7 @@ class ProfileForm(forms.Form):
                                      widget=forms.TextInput(attrs={'class': 'password_input',
                                                                    'placeholder': 'New email address'}),
                                      error_messages={'required': u'Email cannot be null',
-                                                     'invalid': u'enter a valid email address.'},)
+                                                     'invalid': u'enter a valid email address.'}, )
     password_profile_old = forms.CharField(required=True,
                                            min_length=6,
                                            widget=forms.PasswordInput(attrs={'placeholder': 'Your old password'}))
@@ -75,8 +76,9 @@ class ProfileForm(forms.Form):
                                            min_length=6,
                                            widget=forms.PasswordInput(attrs={'placeholder': 'New password'}))
     password_cfm_profile_new = forms.CharField(required=True,
-                                           min_length=6,
-                                               widget=forms.PasswordInput(attrs={'placeholder': 'New password confirmation'}))
+                                               min_length=6,
+                                               widget=forms.PasswordInput(
+                                                   attrs={'placeholder': 'New password confirmation'}))
 
     def clean_email_profile(self):
         email = self.cleaned_data['email_profile']
