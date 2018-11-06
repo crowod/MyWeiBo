@@ -2,7 +2,7 @@ from django.contrib import auth
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from weibo.forms import LoginForm, RegisterForm
+from weibo.forms import LoginForm, RegisterForm, ProfileForm
 from weibo.models import User
 
 
@@ -51,3 +51,26 @@ def landing_view(request):
         lf = LoginForm()
         rf = RegisterForm()
         return render(request, 'index.html', {'lf': lf, 'rf': rf})
+
+def profile_view(request):
+    if request.method == "POST":
+        profile_form = ProfileForm(request.POST)
+        if profile_form.is_valid():
+            email = profile_form.cleaned_data['email_profile']
+            password = profile_form.cleaned_data['password_profile_new']
+            # username here do not be loaded, modify this
+            username = None
+            User.objects.filter(username=username).update(email=email, password=password)
+            return render(request, "profile.html", {"profile_form": profile_form,
+                                                    "success_msg": "Update successfully!",
+                                                    "username": username})
+        else:
+            return render(request, "profile.html", {"error": profile_form.errors,
+                                                    "profile_form": profile_form,
+                                                    "username": ""})
+    else:
+        profile_form = ProfileForm()
+        # username here do not be loaded, modify this
+        username = None
+        return render(request, "profile.html", {"profile_form": profile_form,
+                                                "username": username})
