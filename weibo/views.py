@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from weibo.forms import LoginForm, RegisterForm, ProfileForm
 from weibo.models import User
+from . import forms
 
 current_url = ""
 
@@ -59,18 +60,17 @@ def landing_view(request):
         rf = RegisterForm()
         return render(request, 'entrance.html', {'lf': lf, 'rf': rf})
 
-
 def profile_view(request):
     global current_url
     current_url = '/profile'
     if request.user.is_authenticated:
         user = User.objects.get(email=request.user.email)
         if request.method == "POST":
+            forms.user = user
             profile_form = ProfileForm(request.POST)
             if profile_form.is_valid():
                 email = profile_form.cleaned_data['email_profile']
                 password = profile_form.cleaned_data['password_profile_new']
-                # username here do not be loaded, modify this
                 username = user.username
                 User.objects.filter(username=username).update(email=email, password=password)
                 return render(request, "profile.html", {"profile_form": profile_form,
@@ -82,7 +82,6 @@ def profile_view(request):
                                                         "username": ""})
         else:
             profile_form = ProfileForm()
-            # username here do not be loaded, modify this
             username = user.username
             return render(request, "profile.html", {"profile_form": profile_form,
                                                     "username": username})
