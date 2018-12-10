@@ -46,3 +46,16 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['username']
 
     objects = UserManager()
+
+
+class Comment(models.Model):
+    content = models.CharField(max_length=200)
+    user = models.ManyToManyField(User)
+
+
+class Dynamic(models.Model):
+    content = models.CharField(max_length=300)
+    img_url = models.CharField(max_length=100)
+    publish_time = models.DateTimeField(auto_now_add=True)
+    user = models.ManyToManyField(User)
+    is_liked = models.BooleanField(default=False)

@@ -12,13 +12,14 @@ current_url = ""
 def index_view(request):
     global current_url
     if request.user.is_authenticated:
-        current_url = '/profile'
-        return redirect('/profile')
+        current_url = '/'
+        return render(request, "index.html")
+
     else:
-        return redirect('/entrance')
+        return render(request, 'home.html')
 
 
-def landing_view(request):
+def landing_view(request, status=''):
     global current_url
     current_url = '/entrance'
     if request.method == "POST":
@@ -58,7 +59,8 @@ def landing_view(request):
     else:
         lf = LoginForm()
         rf = RegisterForm()
-        return render(request, 'entrance.html', {'lf': lf, 'rf': rf})
+        return render(request, 'entrance.html', {'lf': lf, 'rf': rf, 'status': status})
+
 
 def profile_view(request):
     global current_url
@@ -95,3 +97,11 @@ def logout_view(request):
         return redirect('/entrance')
     else:
         return redirect(current_url)
+
+
+def sign_in(request):
+    landing_view(request, status='sign in')
+
+
+def sign_up(request):
+    landing_view(request, status='sign up')
