@@ -19,7 +19,7 @@ def index_view(request):
     global current_url
     if request.user.is_authenticated:
         current_url = '/'
-        return render(request, "feed.html")
+        return render(request, "index.html")
 
     else:
         return render(request, 'home.html')
