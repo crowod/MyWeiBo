@@ -1,6 +1,9 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
+from django_thumbs.fields import ImageThumbsField
 from django.db import models
+
+import weibo
 
 
 class UserManager(BaseUserManager):
@@ -41,21 +44,39 @@ class User(AbstractUser):
     username = models.CharField('Username', max_length=30, unique=True)
     email = models.EmailField('Email address', unique=True)
     password = models.CharField(max_length=16)
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
-
     objects = UserManager()
 
 
 class Comment(models.Model):
     content = models.CharField(max_length=200)
     user = models.ManyToManyField(User)
+    datetime = models.DateTimeField(auto_now_add=True)
 
 
 class Dynamic(models.Model):
     content = models.CharField(max_length=300)
-    img_url = models.CharField(max_length=100)
-    publish_time = models.DateTimeField(auto_now_add=True)
+    datetime = models.DateTimeField(auto_now_add=True)
+    comment = models.ManyToManyField(Comment)
     user = models.ManyToManyField(User)
+
+
+class FollowShip(models.Model):
+    follower = models.ForeignKey(User, related_name='follower', on_delete=models.CASCADE)
+    following = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
+
+
+class Liked(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    dynamic = models.ForeignKey(Dynamic, on_delete=models.CASCADE)
     is_liked = models.BooleanField(default=False)
+
+
+class Image(models.Model):
+    SIZES = (
+        {'code': 'avatar', 'wxh': '125x125', 'resize': 'crop'},
+        {'code': 'm', 'wxh': '640x480', 'resize': 'scale'},
+        {'code': '150', 'wxh': '150x150'},  # 'resize' defaults to 'scale'
+    )
+    image = ImageThumbsField(upload_to='media', sizes=SIZES)

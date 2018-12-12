@@ -21,7 +21,15 @@ from weibo import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index_view),
+    path('sign_in', views.sign_in),
+    path('sign_up', views.sign_up),
     path('entrance', views.landing_view),
     path('profile', views.profile_view),
     path('logout', views.logout_view),
+    path('dynamic/<str:name>', views.DynamicOfUser.as_view()),
+    path('dynamic', views.DynamicList.as_view()),
+    path('<str:username>/follower', views.FollowerList.as_view()),
+    path('<str:username>/following', views.FollowingList.as_view()),
+    path('follower', views.PostFollow.as_view()),
+    path('liked', views.PostLiked.as_view())
 ]

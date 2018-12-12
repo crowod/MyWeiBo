@@ -64,6 +64,8 @@ class RegisterForm(forms.Form):
 
 
 user = None
+
+
 class ProfileForm(forms.Form):
     email_profile = forms.EmailField(required=True,
                                      widget=forms.TextInput(attrs={'class': 'password_input',

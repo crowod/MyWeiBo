@@ -2,9 +2,14 @@ from django.contrib import auth
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.utils import timezone
+from rest_framework.response import Response
+
 from weibo.forms import LoginForm, RegisterForm, ProfileForm
-from weibo.models import User
+from weibo.models import User, Dynamic, Liked, FollowShip
+from weibo.serializers import DynamicSerializer, LikedSerializer, UserSerializer, FollowShipSerializer
 from . import forms
+from rest_framework import generics, status
 
 current_url = ""
 
@@ -13,13 +18,13 @@ def index_view(request):
     global current_url
     if request.user.is_authenticated:
         current_url = '/'
-        return render(request, "index.html")
+        return render(request, "feed.html")
 
     else:
         return render(request, 'home.html')
 
 
-def landing_view(request, status=''):
+def landing_view(request, status=0):
     global current_url
     current_url = '/entrance'
     if request.method == "POST":
@@ -100,8 +105,132 @@ def logout_view(request):
 
 
 def sign_in(request):
-    landing_view(request, status='sign in')
+    return landing_view(request, status=0)
 
 
 def sign_up(request):
-    landing_view(request, status='sign up')
+    return landing_view(request, status=1)
+
+
+class DynamicOfUser(generics.ListCreateAPIView):
+    queryset = Dynamic.objects.all()
+    serializer_class = DynamicSerializer
+    lookup_field = 'user'
+
+    def get(self, request, *args, **kwargs):
+        queryset = Dynamic.objects.filter(user__username=kwargs['name']).order_by('datetime')
+        serializer = DynamicSerializer(queryset, many=True)
+        queryset_liked = Liked.objects.filter(user__username=kwargs['name'])
+        serializer_liked = LikedSerializer(queryset_liked, many=True)
+        serializer_list = list(serializer.data)
+        serializer_liked_list = list(serializer_liked.data)
+        result = [y.update({'is_liked': z.get('is_liked')}) for x in serializer_list for y in x.get('user') for z in
+                  serializer_liked_list if z.get('user') == y.get('id') and z.get('dynamic') == x.get('id')]
+        if serializer:
+            return Response({
+                'status': status.HTTP_200_OK,
+                'data': serializer.data
+            })
+        else:
+            return Response({
+                'status': status.HTTP_404_NOT_FOUND
+            })
+
+    def post(self, request, *args, **kwargs):
+        content = request.query_params['content']
+        datetime = timezone.now()
+        user = User.objects.get(username=kwargs['name'])
+        Dynamic.objects.create(content=content, datetime=datetime).user.add(user)
+        return Response({'status': status.HTTP_201_CREATED})
+
+
+class DynamicList(generics.ListAPIView):
+    queryset = Dynamic.objects.all()
+    serializer_class = DynamicSerializer
+
+    def get(self, request, *args, **kwargs):
+        queryset = Dynamic.objects.all().order_by('datetime')
+        serializer = DynamicSerializer(queryset, many=True)
+        if serializer:
+            return Response({
+                'status': status.HTTP_200_OK,
+                'data': serializer.data
+            })
+        else:
+            return Response({
+                'status': status.HTTP_404_NOT_FOUND
+            })
+
+
+class PostLiked(generics.CreateAPIView):
+
+    def post(self, request, *args, **kwargs):
+        username = request.query_params['username']
+        dynamic_id = request.query_params['dynamic_id']
+        is_liked = request.query_params['is_liked']
+        user = User.objects.get(username=username)
+        dynamic = Dynamic.objects.get(id=dynamic_id)
+        liked = Liked.objects.update_or_create(user=user, dynamic=dynamic, defaults={"is_liked": is_liked})
+        if liked:
+            return Response({
+                'status': status.HTTP_201_CREATED
+            })
+        else:
+            return Response({
+                'status': status.HTTP_404_NOT_FOUND
+            })
+
+
+class FollowerList(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        username = kwargs['username']
+        queryset = FollowShip.objects.filter(follower__username=username)
+        serializer = FollowShipSerializer(queryset, many=True)
+        if serializer:
+            return Response({
+                'status': status.HTTP_200_OK,
+                'data': serializer.data
+            })
+        else:
+            return Response({
+                'status': status.HTTP_404_NOT_FOUND
+            })
+
+
+class FollowingList(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        username = kwargs['username']
+        queryset = FollowShip.objects.filter(following__username=username)
+        serializer = FollowShipSerializer(queryset, many=True)
+        if serializer:
+            return Response({
+                'status': status.HTTP_200_OK,
+                'data': serializer.data
+            })
+        else:
+            return Response({
+                'status': status.HTTP_404_NOT_FOUND
+            })
+
+
+class PostFollow(generics.CreateAPIView):
+    def post(self, request, *args, **kwargs):
+        username = request.query_params['username']
+        operation = request.query_params['operation']
+        following_name = request.query_params['following_name']
+        if operation == 'add':
+            user = User.objects.get(username=username)
+            following = User.objects.get(username=following_name)
+            follow_ship = FollowShip.objects.create(follower=user, following=following)
+            if follow_ship:
+                return Response({
+                    'status': status.HTTP_201_CREATED
+                })
+            else:
+                return Response({
+                    'status': status.HTTP_404_NOT_FOUND
+                })
+        else:
+            user = User.objects.get(username=username)
+            following = User.objects.get(username=following_name)
+            # follow_ship = FollowShip.objects.(follower=user, following=following)
