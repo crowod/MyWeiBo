@@ -48,7 +48,7 @@ def landing_view(request, status=0):
                 user = auth.authenticate(username=email, password=password)
                 if user is not None:
                     auth.login(request, user)
-                    return redirect('/profile')
+                    return redirect('/')
                 else:
                     rf = RegisterForm()
                     return render(request, 'entrance.html',
@@ -112,7 +112,7 @@ def sign_up(request):
     return landing_view(request, status=1)
 
 
-class DynamicOfUser(generics.ListCreateAPIView):
+class DynamicUser(generics.ListAPIView):
     queryset = Dynamic.objects.all()
     serializer_class = DynamicSerializer
     lookup_field = 'user'
@@ -136,12 +136,36 @@ class DynamicOfUser(generics.ListCreateAPIView):
                 'status': status.HTTP_404_NOT_FOUND
             })
 
+
+class DynamicAdd(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         content = request.query_params['content']
         datetime = timezone.now()
         user = User.objects.get(username=kwargs['name'])
-        Dynamic.objects.create(content=content, datetime=datetime).user.add(user)
-        return Response({'status': status.HTTP_201_CREATED})
+        result = Dynamic.objects.create(content=content, datetime=datetime).user.add(user)
+        if result:
+            return Response({
+                'status': status.HTTP_201_CREATED
+            })
+        else:
+            return Response({
+                'status': status.HTTP_404_NOT_FOUND
+            })
+
+
+class DynamicDelete(generics.CreateAPIView):
+    def post(self, request, *args, **kwargs):
+        dynamic_id = request.query_params['dynamic_id']
+        user = User.objects.get(username=kwargs['name'])
+        result = Dynamic.objects.get(user=user, dynamic_id=dynamic_id).delete()
+        if result:
+            return Response({
+                'status': status.HTTP_201_CREATED
+            })
+        else:
+            return Response({
+                'status': status.HTTP_404_NOT_FOUND
+            })
 
 
 class DynamicList(generics.ListAPIView):
@@ -213,24 +237,45 @@ class FollowingList(generics.ListAPIView):
             })
 
 
-class PostFollow(generics.CreateAPIView):
+class FollowingAdd(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         username = request.query_params['username']
-        operation = request.query_params['operation']
         following_name = request.query_params['following_name']
-        if operation == 'add':
-            user = User.objects.get(username=username)
-            following = User.objects.get(username=following_name)
-            follow_ship = FollowShip.objects.create(follower=user, following=following)
-            if follow_ship:
-                return Response({
-                    'status': status.HTTP_201_CREATED
-                })
-            else:
-                return Response({
-                    'status': status.HTTP_404_NOT_FOUND
-                })
+        user = User.objects.get(username=username)
+        following = User.objects.get(username=following_name)
+        follow_ship = FollowShip.objects.create(follower=user, following=following)
+        if follow_ship:
+            return Response({
+                'status': status.HTTP_201_CREATED
+            })
         else:
-            user = User.objects.get(username=username)
-            following = User.objects.get(username=following_name)
-            # follow_ship = FollowShip.objects.(follower=user, following=following)
+            return Response({
+                'status': status.HTTP_404_NOT_FOUND
+            })
+
+
+class FollowingCancel(generics.CreateAPIView):
+    def post(self, request, *args, **kwargs):
+        username = request.query_params['username']
+        following_name = request.query_params['following_name']
+        user = User.objects.get(username=username)
+        following = User.objects.get(username=following_name)
+        follow_ship = FollowShip.objects.get(follower=user, following=following).delete()
+        if follow_ship:
+            return Response({
+                'status': status.HTTP_201_CREATED
+            })
+        else:
+            return Response({
+                'status': status.HTTP_404_NOT_FOUND
+            })
+
+
+class CommentList(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        dynamic_id = request.query_params['dynamic_id']
+        dynamic = Dynamic.objects.get(id=dynamic_id)
+
+
+class PostComment(generics.CreateAPIView):
+    pass

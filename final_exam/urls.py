@@ -26,10 +26,13 @@ urlpatterns = [
     path('entrance', views.landing_view),
     path('profile', views.profile_view),
     path('logout', views.logout_view),
-    path('dynamic/<str:name>', views.DynamicOfUser.as_view()),
+    path('dynamic/<str:name>', views.DynamicUser.as_view()),
     path('dynamic', views.DynamicList.as_view()),
+    path('dynamic/add', views.DynamicAdd.as_view()),
+    path('dynamic/delete', views.DynamicDelete.as_view()),
     path('<str:username>/follower', views.FollowerList.as_view()),
     path('<str:username>/following', views.FollowingList.as_view()),
-    path('follower', views.PostFollow.as_view()),
+    path('following/add', views.FollowingAdd.as_view()),
+    path('following/cancel', views.FollowingCancel.as_view()),
     path('liked', views.PostLiked.as_view())
 ]
