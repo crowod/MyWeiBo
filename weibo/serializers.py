@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from weibo.models import User, Dynamic, Liked, FollowShip
+from weibo.models import User, Post, Liked, FollowShip, Collection
 
 
 class FollowShipSerializer(serializers.ModelSerializer):
@@ -21,7 +21,7 @@ class FollowShipSerializer(serializers.ModelSerializer):
 class LikedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Liked
-        fields = ('is_liked', 'user', 'dynamic')
+        fields = ('is_liked', 'user', 'post')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -34,21 +34,33 @@ class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=True)
 
     class Meta:
-        model = Dynamic
+        model = Post
         fields = ('content', 'user', 'datetime')
 
 
-class DynamicSerializer(serializers.ModelSerializer):
+class PostSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=True)
     comment = CommentSerializer(many=True)
     total_liked = serializers.SerializerMethodField()
 
     class Meta:
-        model = Dynamic
+        model = Post
         fields = ('content', 'datetime', 'user', 'comment', 'total_liked', 'id')
 
     def create(self, validated_data):
-        return Dynamic.objects.create(**validated_data)
+        return Post.objects.create(**validated_data)
 
     def get_total_liked(self, obj):
-        return Liked.objects.filter(dynamic__id=obj.id).filter(is_liked=True).count()
+        return Liked.objects.filter(post__id=obj.id).filter(is_liked=True).count()
+
+
+class CollectionSerializer(serializers.ModelSerializer):
+    posts = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Collection
+
+    fields = ('posts',)
+
+    def get_posts(self, obj):
+        return PostSerializer(Post.objects.filter(id=obj.user_id)).data

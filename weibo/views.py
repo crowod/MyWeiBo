@@ -6,8 +6,8 @@ from django.utils import timezone
 from rest_framework.response import Response
 
 from weibo.forms import LoginForm, RegisterForm, ProfileForm
-from weibo.models import User, Dynamic, Liked, FollowShip, Comment
-from weibo.serializers import DynamicSerializer, LikedSerializer, UserSerializer, FollowShipSerializer, \
+from weibo.models import User, Post, Liked, FollowShip, Comment
+from weibo.serializers import PostSerializer, LikedSerializer, UserSerializer, FollowShipSerializer, \
     CommentSerializer
 from . import forms
 from rest_framework import generics, status
@@ -113,20 +113,20 @@ def sign_up(request):
     return landing_view(request, status=1)
 
 
-class DynamicUser(generics.ListAPIView):
-    queryset = Dynamic.objects.all()
-    serializer_class = DynamicSerializer
+class PostUser(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
     lookup_field = 'user'
 
     def get(self, request, *args, **kwargs):
-        queryset = Dynamic.objects.filter(user__username=kwargs['name']).order_by('datetime')
-        serializer = DynamicSerializer(queryset, many=True)
+        queryset = Post.objects.filter(user__username=kwargs['name']).order_by('datetime')
+        serializer = PostSerializer(queryset, many=True)
         queryset_liked = Liked.objects.filter(user__username=kwargs['name'])
         serializer_liked = LikedSerializer(queryset_liked, many=True)
         serializer_list = list(serializer.data)
         serializer_liked_list = list(serializer_liked.data)
         [y.update({'is_liked': z.get('is_liked')}) for x in serializer_list for y in x.get('user') for z in
-         serializer_liked_list if z.get('user') == y.get('id') and z.get('dynamic') == x.get('id')]
+         serializer_liked_list if z.get('user') == y.get('id') and z.get('post') == x.get('id')]
         if serializer:
             return Response({
                 'status': status.HTTP_200_OK,
@@ -138,42 +138,42 @@ class DynamicUser(generics.ListAPIView):
             })
 
 
-class DynamicAdd(generics.CreateAPIView):
-    queryset = Dynamic.objects.all()
-    serializer_class = DynamicSerializer
+class PostAdd(generics.CreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
     def post(self, request, *args, **kwargs):
         content = request.query_params['content']
         username = request.query_params['username']
         datetime = timezone.now()
         user = User.objects.get(username=username)
-        Dynamic.objects.create(content=content, datetime=datetime).user.add(user)
+        Post.objects.create(content=content, datetime=datetime).user.add(user)
         return Response({
             'status': status.HTTP_201_CREATED
         })
 
 
-class DynamicDelete(generics.CreateAPIView):
-    queryset = Dynamic.objects.all()
-    serializer_class = DynamicSerializer
+class PostDelete(generics.CreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
     def post(self, request, *args, **kwargs):
-        dynamic_id = request.query_params['dynamic_id']
+        post_id = request.query_params['post_id']
         username = request.query_params['username']
         user = User.objects.get(username=username)
-        Dynamic.objects.get(user=user, id=dynamic_id).delete()
+        Post.objects.get(user=user, id=post_id).delete()
         return Response({
             'status': status.HTTP_201_CREATED
         })
 
 
-class DynamicList(generics.ListAPIView):
-    queryset = Dynamic.objects.all()
-    serializer_class = DynamicSerializer
+class PostList(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
     def get(self, request, *args, **kwargs):
-        queryset = Dynamic.objects.all().order_by('datetime')
-        serializer = DynamicSerializer(queryset, many=True)
+        queryset = Post.objects.all().order_by('datetime')
+        serializer = PostSerializer(queryset, many=True)
         if serializer:
             return Response({
                 'status': status.HTTP_200_OK,
@@ -191,11 +191,11 @@ class PostLiked(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         username = request.query_params['username']
-        dynamic_id = request.query_params['dynamic_id']
+        post_id = request.query_params['post_id']
         is_liked = request.query_params['is_liked']
         user = User.objects.get(username=username)
-        dynamic = Dynamic.objects.get(id=dynamic_id)
-        liked = Liked.objects.update_or_create(user=user, dynamic=dynamic, defaults={"is_liked": is_liked})
+        post = Post.objects.get(id=post_id)
+        liked = Liked.objects.update_or_create(user=user, post=post, defaults={"is_liked": is_liked})
         if liked:
             return Response({
                 'status': status.HTTP_201_CREATED
@@ -286,9 +286,9 @@ class CommentList(generics.ListAPIView):
     serializer_class = CommentSerializer
 
     def get(self, request, *args, **kwargs):
-        dynamic_id = request.query_params['dynamic_id']
-        dynamic = Dynamic.objects.get(id=dynamic_id)
-        queryset = Comment.objects.filter(dynamic=dynamic)
+        post_id = request.query_params['post_id']
+        post = Post.objects.get(id=post_id)
+        queryset = Comment.objects.filter(post=post)
         serializer = CommentSerializer(queryset, many=True)
         if serializer:
             return Response({
@@ -307,13 +307,13 @@ class CommentAdd(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         username = request.query_params['username']
-        dynamic_id = request.query_params['dynamic_id']
+        post_id = request.query_params['post_id']
         content = request.query_params['content']
         datetime = timezone.now()
         user = User.objects.get(username=username)
         comment = Comment.objects.create(content=content, datetime=datetime)
         comment.user.add(user)
-        Dynamic.objects.get(id=dynamic_id).comment.add(comment)
+        Post.objects.get(id=post_id).comment.add(comment)
         return Response({
             'status': status.HTTP_201_CREATED
         })
@@ -343,14 +343,14 @@ class UserSearch(generics.ListAPIView):
             })
 
 
-class DynamicSearch(generics.ListAPIView):
-    queryset = Dynamic.objects.all()
-    serializer_class = DynamicSerializer
+class PostSearch(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
     def get(self, request, *args, **kwargs):
         keyword = request.query_params['keyword']
-        queryset = Dynamic.objects.filter(content__icontains=keyword)
-        serializer = DynamicSerializer(queryset, many=True)
+        queryset = Post.objects.filter(content__icontains=keyword)
+        serializer = PostSerializer(queryset, many=True)
         if serializer:
             return Response({
                 'status': status.HTTP_200_OK,
@@ -361,3 +361,23 @@ class DynamicSearch(generics.ListAPIView):
                 'status': status.HTTP_404_NOT_FOUND,
                 'data': serializer.data
             })
+
+
+class CollectionList(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        pass
+
+
+class CollectionAdd(generics.CreateAPIView):
+    def post(self, request, *args, **kwargs):
+        pass
+
+
+class CollectionCancel(generics.CreateAPIView):
+    def post(self, request, *args, **kwargs):
+        pass
+
+
+class AvatarUpload(generics.CreateAPIView):
+    def post(self, request, *args, **kwargs):
+        pass

@@ -82,7 +82,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('is_liked', models.BooleanField(default=False)),
-                ('dynamic', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='weibo.Dynamic')),
+                ('dynamic', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='weibo.Post')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),

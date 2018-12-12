@@ -55,7 +55,7 @@ class Comment(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
 
 
-class Dynamic(models.Model):
+class Post(models.Model):
     content = models.CharField(max_length=300)
     datetime = models.DateTimeField(auto_now_add=True)
     comment = models.ManyToManyField(Comment)
@@ -69,7 +69,7 @@ class FollowShip(models.Model):
 
 class Liked(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    dynamic = models.ForeignKey(Dynamic, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     is_liked = models.BooleanField(default=False)
 
 
@@ -80,3 +80,8 @@ class Image(models.Model):
         {'code': '150', 'wxh': '150x150'},  # 'resize' defaults to 'scale'
     )
     image = ImageThumbsField(upload_to='media', sizes=SIZES)
+
+
+class Collection(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
