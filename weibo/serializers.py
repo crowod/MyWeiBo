@@ -4,9 +4,18 @@ from weibo.models import User, Dynamic, Liked, FollowShip
 
 
 class FollowShipSerializer(serializers.ModelSerializer):
+    following_user = serializers.SerializerMethodField()
+    follower_user = serializers.SerializerMethodField()
+
     class Meta:
         model = FollowShip
-        fields = ('follower', 'following')
+        fields = ('follower', 'following', 'following_user', 'follower_user')
+
+    def get_following_user(self, obj):
+        return UserSerializer(User.objects.get(id=obj.following_id)).data
+
+    def get_follower_user(self, obj):
+        return UserSerializer(User.objects.get(id=obj.follower_id)).data
 
 
 class LikedSerializer(serializers.ModelSerializer):

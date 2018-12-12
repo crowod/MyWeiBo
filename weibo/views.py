@@ -6,8 +6,9 @@ from django.utils import timezone
 from rest_framework.response import Response
 
 from weibo.forms import LoginForm, RegisterForm, ProfileForm
-from weibo.models import User, Dynamic, Liked, FollowShip
-from weibo.serializers import DynamicSerializer, LikedSerializer, UserSerializer, FollowShipSerializer
+from weibo.models import User, Dynamic, Liked, FollowShip, Comment
+from weibo.serializers import DynamicSerializer, LikedSerializer, UserSerializer, FollowShipSerializer, \
+    CommentSerializer
 from . import forms
 from rest_framework import generics, status
 
@@ -124,8 +125,8 @@ class DynamicUser(generics.ListAPIView):
         serializer_liked = LikedSerializer(queryset_liked, many=True)
         serializer_list = list(serializer.data)
         serializer_liked_list = list(serializer_liked.data)
-        result = [y.update({'is_liked': z.get('is_liked')}) for x in serializer_list for y in x.get('user') for z in
-                  serializer_liked_list if z.get('user') == y.get('id') and z.get('dynamic') == x.get('id')]
+        [y.update({'is_liked': z.get('is_liked')}) for x in serializer_list for y in x.get('user') for z in
+         serializer_liked_list if z.get('user') == y.get('id') and z.get('dynamic') == x.get('id')]
         if serializer:
             return Response({
                 'status': status.HTTP_200_OK,
@@ -138,34 +139,32 @@ class DynamicUser(generics.ListAPIView):
 
 
 class DynamicAdd(generics.CreateAPIView):
+    queryset = Dynamic.objects.all()
+    serializer_class = DynamicSerializer
+
     def post(self, request, *args, **kwargs):
         content = request.query_params['content']
+        username = request.query_params['username']
         datetime = timezone.now()
-        user = User.objects.get(username=kwargs['name'])
-        result = Dynamic.objects.create(content=content, datetime=datetime).user.add(user)
-        if result:
-            return Response({
-                'status': status.HTTP_201_CREATED
-            })
-        else:
-            return Response({
-                'status': status.HTTP_404_NOT_FOUND
-            })
+        user = User.objects.get(username=username)
+        Dynamic.objects.create(content=content, datetime=datetime).user.add(user)
+        return Response({
+            'status': status.HTTP_201_CREATED
+        })
 
 
 class DynamicDelete(generics.CreateAPIView):
+    queryset = Dynamic.objects.all()
+    serializer_class = DynamicSerializer
+
     def post(self, request, *args, **kwargs):
         dynamic_id = request.query_params['dynamic_id']
-        user = User.objects.get(username=kwargs['name'])
-        result = Dynamic.objects.get(user=user, dynamic_id=dynamic_id).delete()
-        if result:
-            return Response({
-                'status': status.HTTP_201_CREATED
-            })
-        else:
-            return Response({
-                'status': status.HTTP_404_NOT_FOUND
-            })
+        username = request.query_params['username']
+        user = User.objects.get(username=username)
+        Dynamic.objects.get(user=user, id=dynamic_id).delete()
+        return Response({
+            'status': status.HTTP_201_CREATED
+        })
 
 
 class DynamicList(generics.ListAPIView):
@@ -187,6 +186,8 @@ class DynamicList(generics.ListAPIView):
 
 
 class PostLiked(generics.CreateAPIView):
+    queryset = Liked.objects.all()
+    serializer_class = LikedSerializer
 
     def post(self, request, *args, **kwargs):
         username = request.query_params['username']
@@ -206,14 +207,18 @@ class PostLiked(generics.CreateAPIView):
 
 
 class FollowerList(generics.ListAPIView):
+    queryset = FollowShip.objects.all()
+    serializer_class = FollowShipSerializer
+
     def get(self, request, *args, **kwargs):
         username = kwargs['username']
-        queryset = FollowShip.objects.filter(follower__username=username)
+        queryset = FollowShip.objects.filter(following__username=username)
         serializer = FollowShipSerializer(queryset, many=True)
+        result = [x.get('follower_user') for x in serializer.data]
         if serializer:
             return Response({
                 'status': status.HTTP_200_OK,
-                'data': serializer.data
+                'data': result
             })
         else:
             return Response({
@@ -222,14 +227,18 @@ class FollowerList(generics.ListAPIView):
 
 
 class FollowingList(generics.ListAPIView):
+    queryset = FollowShip.objects.all()
+    serializer_class = FollowShipSerializer
+
     def get(self, request, *args, **kwargs):
         username = kwargs['username']
-        queryset = FollowShip.objects.filter(following__username=username)
+        queryset = FollowShip.objects.filter(follower__username=username)
         serializer = FollowShipSerializer(queryset, many=True)
+        result = [x.get('following_user') for x in serializer.data]
         if serializer:
             return Response({
                 'status': status.HTTP_200_OK,
-                'data': serializer.data
+                'data': result
             })
         else:
             return Response({
@@ -238,6 +247,9 @@ class FollowingList(generics.ListAPIView):
 
 
 class FollowingAdd(generics.CreateAPIView):
+    queryset = FollowShip.objects.all()
+    serializer_class = FollowShipSerializer
+
     def post(self, request, *args, **kwargs):
         username = request.query_params['username']
         following_name = request.query_params['following_name']
@@ -255,15 +267,33 @@ class FollowingAdd(generics.CreateAPIView):
 
 
 class FollowingCancel(generics.CreateAPIView):
+    queryset = FollowShip.objects.all()
+    serializer_class = FollowShipSerializer
+
     def post(self, request, *args, **kwargs):
         username = request.query_params['username']
         following_name = request.query_params['following_name']
         user = User.objects.get(username=username)
         following = User.objects.get(username=following_name)
-        follow_ship = FollowShip.objects.get(follower=user, following=following).delete()
-        if follow_ship:
+        FollowShip.objects.get(follower=user, following=following).delete()
+        return Response({
+            'status': status.HTTP_201_CREATED
+        })
+
+
+class CommentList(generics.ListAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def get(self, request, *args, **kwargs):
+        dynamic_id = request.query_params['dynamic_id']
+        dynamic = Dynamic.objects.get(id=dynamic_id)
+        queryset = Comment.objects.filter(dynamic=dynamic)
+        serializer = CommentSerializer(queryset, many=True)
+        if serializer:
             return Response({
-                'status': status.HTTP_201_CREATED
+                'status': status.HTTP_200_OK,
+                'data': serializer.data
             })
         else:
             return Response({
@@ -271,11 +301,63 @@ class FollowingCancel(generics.CreateAPIView):
             })
 
 
-class CommentList(generics.ListAPIView):
-    def get(self, request, *args, **kwargs):
+class CommentAdd(generics.CreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def post(self, request, *args, **kwargs):
+        username = request.query_params['username']
         dynamic_id = request.query_params['dynamic_id']
-        dynamic = Dynamic.objects.get(id=dynamic_id)
+        content = request.query_params['content']
+        datetime = timezone.now()
+        user = User.objects.get(username=username)
+        comment = Comment.objects.create(content=content, datetime=datetime)
+        comment.user.add(user)
+        Dynamic.objects.get(id=dynamic_id).comment.add(comment)
+        return Response({
+            'status': status.HTTP_201_CREATED
+        })
 
 
-class PostComment(generics.CreateAPIView):
+class CommentDelete(generics.CreateAPIView):
     pass
+
+
+class UserSearch(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def get(self, request, *args, **kwargs):
+        keyword = request.query_params['keyword']
+        queryset = User.objects.filter(username__icontains=keyword)
+        serializer = UserSerializer(queryset, many=True)
+        if serializer:
+            return Response({
+                'status': status.HTTP_200_OK,
+                'data': serializer.data
+            })
+        else:
+            return Response({
+                'status': status.HTTP_404_NOT_FOUND,
+                'data': serializer.data
+            })
+
+
+class DynamicSearch(generics.ListAPIView):
+    queryset = Dynamic.objects.all()
+    serializer_class = DynamicSerializer
+
+    def get(self, request, *args, **kwargs):
+        keyword = request.query_params['keyword']
+        queryset = Dynamic.objects.filter(content__icontains=keyword)
+        serializer = DynamicSerializer(queryset, many=True)
+        if serializer:
+            return Response({
+                'status': status.HTTP_200_OK,
+                'data': serializer.data
+            })
+        else:
+            return Response({
+                'status': status.HTTP_404_NOT_FOUND,
+                'data': serializer.data
+            })
