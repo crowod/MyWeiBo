@@ -1,0 +1,149 @@
+
+.my_profile_style {
+    width: 80%;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.my_profile_style p {
+    width: 50%;
+    min-width: 450px;
+    float: left;
+    text-align: right;
+    margin-top: 1.3em;
+    color: #464646;
+}
+
+.my_profile_style span {
+    margin-left: 1em;
+    float: right;
+    width: 50%;
+    box-sizing: border-box;
+    text-align:left;
+    font-size:0.9em;
+    height:1.3em;
+    line-height: 1.2em;
+    border-radius:4px;
+    border:1px solid #e2e6e9;
+    color:#6a6f77;
+    -web-kit-appearance:none;
+    -moz-appearance: none;
+    display:block;
+    outline:0;
+    padding:0 0.5em;
+    text-decoration:none;
+    -moz-box-shadow:0 0 1px #acacac;
+    -webkit-box-shadow:0 0 1px #acacac;
+    box-shadow:0 0 1px #acacac;
+}
+
+.my_profile_style button {
+    width: auto;
+    height: 2em;
+    float: left;
+    font-weight: bold;
+	border-radius: 1em;
+    border: 1px #7bbdff solid;
+	background: #ffffff;
+	cursor: pointer;
+	outline: none;
+	color: #75abe9;
+	font-size: 13px;
+}
+
+.my_profile_style a {
+    width: 50%;
+    float: right;
+    margin-left: 1em;
+}
+
+.profile_button {
+
+}
+
+.profile_button input[type="password"] {
+    width: 60%;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 20px;
+    box-sizing: border-box;
+    text-align:left;
+    font-size:1em;
+    height:3em;
+    line-height: 2em;
+    border-radius:4px;
+    border:1px solid #c7cbce;
+    color:#6a6f77;
+    -web-kit-appearance:none;
+    -moz-appearance: none;
+    display:block;
+    outline:0;
+    padding:0 0.5em;
+    text-decoration:none;
+    -moz-box-shadow:0 0 1px #acacac;
+    -webkit-box-shadow:0 0 1px #acacac;
+    box-shadow:0 0 1px #acacac;
+}
+
+.profile_button input[type="password"]:focus {
+    border:2px solid #83b6ff;
+    -moz-box-shadow:0 0 5px rgba(244, 243, 10, 0.56);
+    -webkit-box-shadow:0 0 5px rgba(244, 243, 10, 0.56);
+    box-shadow:0 0 5px rgba(244, 243, 10, 0.56);
+}
+
+.profile_button button {
+	width: 60%;
+    height: 2.4em;
+    font-weight: bold;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+	border-radius: 0.5em;
+    border: 1px #ffffca solid;
+	background: #79ff0e;
+	cursor: pointer;
+	outline: none;
+	color: #ffffff;
+	font-size: 17px;
+    opacity: 0.8;
+}
+.profile_button button:hover {
+    border: 3px #ffffca solid;
+	background: #eac019;
+    opacity: 1;
+}
+
+.my_line {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(214, 214, 214, 0.75);
+    margin-top: 1.2em;
+}
+
+/*居中*/
+.my_center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error_msg {
+    width: 60%;
+    height: 40px;
+    line-height: 38px;
+    margin-left: 20%;
+    margin-top: 20px;
+    display: none;
+    font-size: 18px;
+    font-weight: 500;
+    color: #a2bc1b;
+    border-radius: 5px;
+    border: 1px #6db48e solid;
+    background-color: #85ffeb;
+    text-align: center;
+    -moz-box-shadow:0 0 1px #fffe72;
+    -webkit-box-shadow:0 0 1px #fffe72;
+    box-shadow:0 0 1px #fffe72;
+}

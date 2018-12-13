@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weibo</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/entrance.css">
+    <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            {% if status %}
+                {% if status == 1 %}
+                    $('#tab-2').attr('checked', "");
+                    $('#tab-1').removeAttr("checked");
+                {% endif %}
+            {% else %}
+                $('#tab-1').attr('checked', "");
+                $('#tab-2').removeAttr("checked");
+            {% endif %}
+        });
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 2000);
+    </script>
+</head>
+<body>
+<div class="login-wrap">
+    <div class="login-html">
+        <input id="tab-1" type="radio" name="tab" class="sign-in"><label for="tab-1" class="tab">Sign In</label>
+        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
+        <div class="login-form">
+            {% load widget_tweaks %}
+            <div class="sign-in-htm">
+                <form method="post">
+                    {% csrf_token %}
+                    {% if lf.errors %}
+                        {% for field in lf %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in lf.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if error %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endif %}
+                    <div class="group">
+                        <label for="user" class="label">Email Address</label>
+                        {{ lf.email_sign_in|add_class:"input" }}
+                    </div>
+                    <div class="group">
+                        <label for="pass" class="label">Password</label>
+                        {{ lf.password_sign_in|add_class:"input"|attr:"data-type:password" }}
+                    </div>
+                    <div class="group">
+                        <input id="check" type="checkbox" class="check" checked>
+                        <label for="check"><span class="icon"></span> Keep me Signed in</label>
+                    </div>
+                    <div class="group">
+                        <button type="submit" class="button" value="Sign In">Sign In</button>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="foot-lnk">
+                        <a href="">Forgot Password?</a>
+                    </div>
+                </form>
+            </div>
+            <div class="sign-up-htm">
+                <form method="post">
+                    {% csrf_token %}
+                    {% if rf.errors %}
+                        {% for field in rf %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in rf.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="group">
+                        <label for="user" class="label">Email Address</label>
+                        {{ rf.email_sign_up|add_class:"input" }}
+                    </div>
+                    <div class="group">
+                        <label for="pass" class="label">Username</label>
+                        {{ rf.username_sign_up|add_class:"input" }}
+                    </div>
+                    <div class="group">
+                        <label for="pass" class="label">Password</label>
+                        {{ rf.password_sign_up|add_class:"input"|attr:"data-type:password" }}
+                    </div>
+                    <div class="group">
+                        <label for="pass" class="label">Repeat Password</label>
+                        {#                    <input id="pass" type="password" class="input" data-type="password">#}
+                        {{ rf.password_cfm_sign_up|add_class:"input"|attr:"data-type:password" }}
+                    </div>
+                    <div class="group">
+                        <button type="submit" class="button" value="Sign Up">Sign Up</button>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="foot-lnk">
+                        <label for="tab-1">Already Member?</label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#tab-1').on("click", function () {
+        $('.sign-up-htm form input').each(function () {
+            $(this).val("")
+        })
+    });
+    $('#tab-2').on("click", function () {
+        $('.sign-in-htm form input').each(function () {
+            $(this).val("")
+        })
+    })
+</script>
+</body>
+</html>
