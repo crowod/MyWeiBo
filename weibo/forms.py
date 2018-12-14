@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.core.validators import RegexValidator
 
@@ -20,14 +22,6 @@ class LoginForm(forms.Form):
 
 class RegisterForm(forms.Form):
     email_sign_up = forms.EmailField(required=True,
-                                     validators=[
-                                         RegexValidator(
-                                             regex='^([0-9a-z]([-.\w]*[0-9a-z])*@([0-9a-z][-\w]*[0-9a-z]\.)+[a-z]{2,'
-                                                   '3})$',
-                                             message='email has illegal characters.',
-                                             code='invalid_email'
-                                         ),
-                                     ],
                                      error_messages={'required': u'Email cannot be null',
                                                      'invalid': u'enter a valid email address.'}, )
 
@@ -45,6 +39,8 @@ class RegisterForm(forms.Form):
 
     def clean_email_sign_up(self):
         email = self.cleaned_data['email_sign_up']
+        if re.search('[A-Z]+', email):
+            raise forms.ValidationError('email has illegal characters')
         have_email = User.objects.filter(email=email).count()
         if have_email:
             raise forms.ValidationError('email already taken.')
