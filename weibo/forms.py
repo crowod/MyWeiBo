@@ -73,11 +73,6 @@ user = None
 
 
 class ProfileForm(forms.Form):
-    email_profile = forms.EmailField(required=True,
-                                     widget=forms.TextInput(attrs={'class': 'password_input',
-                                                                   'placeholder': 'New email address'}),
-                                     error_messages={'required': u'Email cannot be null',
-                                                     'invalid': u'enter a valid email address.'}, )
     password_profile_old = forms.CharField(required=True,
                                            min_length=6,
                                            widget=forms.PasswordInput(attrs={'placeholder': 'Your old password'}))
@@ -88,21 +83,6 @@ class ProfileForm(forms.Form):
                                                min_length=6,
                                                widget=forms.PasswordInput(
                                                    attrs={'placeholder': 'New password confirmation'}))
-
-    def clean_email_profile(self):
-        email = self.cleaned_data['email_profile']
-        have_email = User.objects.filter(email=email).count()
-        if have_email:
-            raise forms.ValidationError('email already taken.')
-        else:
-            return email
-
-    def clean_password_profile_old(self):
-        password_old = self.cleaned_data['password_profile_old']
-        if password_old != User.objects.get(username=user.username).password:
-            raise forms.ValidationError('invalid password.')
-        else:
-            return password_old
 
     def clean_password_profile_new(self):
         password_new = self.cleaned_data['password_profile_new']

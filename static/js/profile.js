@@ -9,7 +9,7 @@ function passwordValidation() {
     let new_pw = document.getElementById("new_password").value;
     let pw_cfm = document.getElementById("password_cfm").value;
     let error_msg = document.getElementById("error_msg");
-    let btn = document.getElementById("updateButton");
+    let btn = document.getElementById("update_password");
 
     if (old_pw.length < 6) {
         error_msg.innerText = "Old password too short!";
