@@ -282,13 +282,15 @@
                                                 {% endfor %}
                                             {% endif %}
                                             <form id="updateForm" action="/profile" method="post">
+                                                <div id="error_msg"></div>
                                                 {% csrf_token %}
-                                                {{ profile_form.password_profile_old }}
-                                                {{ profile_form.password_profile_new }}
-                                                {{ profile_form.password_cfm_profile_new }}
+                                                {% load widget_tweaks %}
+                                                {{ profile_form.password_profile_old|attr:"id:old_password" }}
+                                                {{ profile_form.password_profile_new|attr:"id:new_password" }}
+                                                {{ profile_form.password_cfm_profile_new|attr:"id:password_cfm" }}
                                             </form>
                                             <div class="my_line"></div>
-                                            <button class="button_update" form="updateForm"
+                                            <button class="button_update" form="updateForm" id="update_password"
                                                     onclick="passwordValidation()">UPDATE
                                             </button>
                                         </div>
