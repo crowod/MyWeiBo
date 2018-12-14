@@ -37,6 +37,8 @@ urlpatterns = [
     path('<str:username>/following', views.FollowingList.as_view()),
     path('following/add', views.FollowingAdd.as_view()),
     path('following/cancel', views.FollowingCancel.as_view()),
+    path('following', views.following_view),
+    path('follower', views.follower_view),
     path('comments/all', views.CommentList.as_view()),
     path('comments/add', views.CommentAdd.as_view()),
     path('comments/delete', views.CommentDelete.as_view()),

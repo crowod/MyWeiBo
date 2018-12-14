@@ -30,6 +30,27 @@ def index_view(request):
         return render(request, 'home.html')
 
 
+def post_view(request):
+    if request.user.is_authenticated:
+        return render(request, 'userPost.html')
+    else:
+        return render(request, 'home.html')
+
+
+def following_view(request):
+    if request.user.is_authenticated:
+        return render(request, 'userFollow.html')
+    else:
+        return render(request, 'home.html')
+
+
+def follower_view(request):
+    if request.user.is_authenticated:
+        return render(request, 'userFollower.html')
+    else:
+        return render(request, 'home.html')
+
+
 def landing_view(request, status=0):
     global current_url
     current_url = '/entrance'
