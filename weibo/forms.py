@@ -5,15 +5,16 @@ from weibo.models import User
 
 
 class LoginForm(forms.Form):
-    email_sign_in = forms.EmailField(required=True, error_messages={'required': u'Email cannot be null',
-                                                                    'invalid': u'enter a valid email address.'}, )
+    email_sign_in = forms.CharField(required=True, error_messages={'required': u'Email/Username cannot be null',
+                                                                   'invalid': u'enter a valid email/username.'}, )
     password_sign_in = forms.CharField(widget=forms.PasswordInput(), min_length=6, required=True, )
 
     def clean_email_sign_in(self):
         email = self.cleaned_data['email_sign_in']
         have_email = User.objects.filter(email=email).count()
-        if have_email == 0:
-            raise forms.ValidationError('email not found.')
+        have_username = User.objects.filter(username=email).count()
+        if have_email == 0 and have_username == 0:
+            raise forms.ValidationError('user not found.')
         return email
 
 
