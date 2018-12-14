@@ -26,6 +26,7 @@ urlpatterns = [
     path('entrance', views.landing_view),
     path('profile', views.profile_view),
     path('logout', views.logout_view),
+    path('user_post',views.post_view),
     path('users/me', views.MyProfile.as_view()),
     path('users/search', views.UserSearch.as_view()),
     path('posts/all', views.PostList.as_view()),
