@@ -14,12 +14,15 @@ function passwordValidation() {
         error_msg.innerText = "Old password too short!";
         error_msg.innerText = "Previous password too short!";
         error_msg.style.display = "block";
+        event.preventDefault();
     } else if (new_pw.length < 6) {
         error_msg.innerText = "New password too short!";
         error_msg.style.display = "block";
+        event.preventDefault();
     } else if (new_pw !== pw_cfm) {
         error_msg.innerText = "Password doesn't match!";
         error_msg.style.display = "block";
+        event.preventDefault();
     } else {
         btn.submit();
     }

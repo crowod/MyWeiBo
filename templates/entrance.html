@@ -61,14 +61,14 @@
                     </div>
                     <div class="group">
                         <label for="pass" class="label">Password</label>
-                        {{ lf.password_sign_in|add_class:"input"|attr:"data-type:password" }}
+                        {{ lf.password_sign_in|add_class:"input"|attr:"data-type:password,id:id_pwd" }}
                     </div>
                     <div class="group">
                         <input id="check" type="checkbox" class="check" checked>
                         <label for="check"><span class="icon"></span> Keep me Signed in</label>
                     </div>
                     <div class="group">
-                        <button type="submit" class="button" value="Sign In">Sign In</button>
+                        <button type="submit" class="button" value="Sign In" >Sign In</button>
                     </div>
                     <div class="hr"></div>
                     <div class="foot-lnk">
@@ -76,8 +76,9 @@
                     </div>
                 </form>
             </div>
-            <div class="sign-up-htm">
+            <div class="sign-up-htm" >
                 <form method="post">
+                    <div id="tip"></div>
                     {% csrf_token %}
                     {% if rf.errors %}
                         {% for field in rf %}
@@ -95,23 +96,22 @@
                     {% endif %}
                     <div class="group">
                         <label for="user" class="label">Email Address</label>
-                        {{ rf.email_sign_up|add_class:"input" }}
+                        {{ rf.email_sign_up|add_class:"input" |attr:"id:id_email"}}
                     </div>
                     <div class="group">
                         <label for="pass" class="label">Username</label>
-                        {{ rf.username_sign_up|add_class:"input" }}
+                        {{ rf.username_sign_up|add_class:"input"|attr:"id:id_username" }}
                     </div>
                     <div class="group">
                         <label for="pass" class="label">Password</label>
-                        {{ rf.password_sign_up|add_class:"input"|attr:"data-type:password" }}
+                        {{ rf.password_sign_up|add_class:"input"|attr:"data-type:password"|attr:"id:id_pwd1" }}
                     </div>
                     <div class="group">
                         <label for="pass" class="label">Repeat Password</label>
-                        {#                    <input id="pass" type="password" class="input" data-type="password">#}
-                        {{ rf.password_cfm_sign_up|add_class:"input"|attr:"data-type:password" }}
+                        {{ rf.password_cfm_sign_up|add_class:"input"|attr:"data-type:password"|attr:"id:id_pwd2" }}
                     </div>
                     <div class="group">
-                        <button type="submit" class="button" value="Sign Up">Sign Up</button>
+                        <button type="submit" class="button" value="Sign Up" onclick="check_commit()">Sign Up</button>
                     </div>
                     <div class="hr"></div>
                     <div class="foot-lnk">
@@ -134,5 +134,6 @@
         })
     })
 </script>
+<script src="../static/js/entrance.js"></script>
 </body>
 </html>
