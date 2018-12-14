@@ -5,7 +5,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>weibo</title>
     <link href="../static/css/style.css" rel="stylesheet">
+    <link href="../static/css/index.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+            integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+            crossorigin="anonymous"></script>
 </head>
 
 <body class="page page-spa">
@@ -119,110 +125,119 @@
     <div class="app-container">
         <div class="root-layout">
             <div class="site-header">
-                    <div class="container-fluid is-limited no-padding">
-                        <div class="row middle-xs site-header-wrap">
-                            <div class="col col-xs  site-header-left">
-                                <div class="row start-xs">
-                                    <div class="col col-xs ">
-                                        <div class="row no-margin middle-xs brand">
-                                            <a href="/">
-                                                <img class="brand-logo" src="../static/image/social-weibo.svg" href=""><span class="brand-name">WeiBo</span>
-                                            </a>
-                                        </div>
+                <div class="container-fluid is-limited no-padding">
+                    <div class="row middle-xs site-header-wrap">
+                        <div class="col col-xs  site-header-left">
+                            <div class="row start-xs">
+                                <div class="col col-xs ">
+                                    <div class="row no-margin middle-xs brand">
+                                        <a href="/">
+                                            <img class="brand-logo" src="../static/image/social-weibo.svg" href=""><span
+                                                class="brand-name">WeiBo</span>
+                                        </a>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col  site-header-search hidden-xs hidden-sm">
-                                <div>
-                                    <div>
-                                        <div class="search-wrap is-flex between-xs dropdown-trigger">
-                                            <input class="input search-wrap-input" placeholder="" type="text" value="">
-                                            <div class="search-wrap-btn-default">
-                                                <svg class="symbol symbol-search">
-                                                    <use xlink:href="#symbol-search"></use>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col col-xs  site-header-right">
-                                <div class="row no-margin end-xs middle-xs is-flex middle-xs">
-                                    <a class="header-item hidden-xs"href="/">Home</a>
-                                    <div class="user-info header-item dropdown-trigger">
-                                        <div class="user-avatar ">
-                                            <div class="user-avatar-content" style="background-image: url(&quot;../static/image/avatar.png&quot;);"></div>
-                                        </div>
-                                    </div>
-
-                                    <a href="/logout">
-                                    <span class="header-item header-item-icon hidden-xs" >
-                                            <svg class="symbol symbol-poweroff" >
-                                                <use xlink:href="#symbol-poweroff"></use>
-                                            </svg>
-                                    </span>
-                                    </a>
                                 </div>
                             </div>
                         </div>
+                        <div class="col  site-header-search hidden-xs hidden-sm">
+                            <div>
+                                <div>
+                                    <div class="search-wrap is-flex between-xs dropdown-trigger">
+                                        <input class="input search-wrap-input" placeholder="" type="text" value="">
+                                        <div class="search-wrap-btn-default">
+                                            <svg class="symbol symbol-search">
+                                                <use xlink:href="#symbol-search"></use>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col col-xs  site-header-right">
+                            <div class="row no-margin end-xs middle-xs is-flex middle-xs">
+                                <a class="header-item hidden-xs" href="/">Home</a>
+                                <div class="user-info header-item dropdown-trigger">
+                                    <div class="user-avatar ">
+                                        <div class="user-avatar-content"
+                                             style="background-image: url(&quot;../static/image/avatar.png&quot;);"></div>
+                                    </div>
+                                </div>
+
+                                <a href="/logout">
+                                    <span class="header-item header-item-icon hidden-xs">
+                                            <svg class="symbol symbol-poweroff">
+                                                <use xlink:href="#symbol-poweroff"></use>
+                                            </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
+                </div>
             </div>
             <div class="container-fluid is-limited no-padding solid-layer">
                 <div class="row no-margin center-xs feed-root">
                     <div class="col  feed-left hidden-xs hidden-sm">
                         <div class="user-nav" style="width: 250px;">
-                                <div class="user-profile">
-                                    <div class="user-profile-background" style="background-image: url(&quot;../static/image/bg.png&quot;);"></div>
-                                    <div class="user-profile-thumbnailUrl">
-                                        <div class="user-avatar ">
-                                            <div class="user-avatar-content" style="background-image: url(&quot;../static/image/avatar.png&quot;);"></div>
-                                        </div>
-                                    </div>
-                                    <div class="user-profile-main">
-                                        <div class="user-profile-main-screen-name">YoungYang</div>
-                                        <div class="user-profile-main-stats user-profile-main-item">
-                                            <svg class="symbol symbol-dig user-profile-main-stats-icon">
-                                                <use xlink:href="#symbol-dig"></use>
-                                            </svg>Earned 10 likes
-                                        </div>
-                                        <div class="user-profile-main-stats user-profile-main-item">
-                                            <svg class="symbol symbol-diamond user-profile-main-stats-icon">
-                                                <use xlink:href="#symbol-diamond"></use>
-                                            </svg>Get 0 forwards
-                                        </div>
-                                        <div class="user-profile-main-brief">stay hungry，stay foolish</div>
+                            <div class="user-profile">
+                                <div class="user-profile-background"
+                                     style="background-image: url(&quot;../static/image/bg.png&quot;);"></div>
+                                <div class="user-profile-thumbnailUrl">
+                                    <div class="user-avatar ">
+                                        <div class="user-avatar-content"
+                                             style="background-image: url(&quot;../static/image/avatar.png&quot;);"></div>
                                     </div>
                                 </div>
-                                <div>
-                                    <ul class="menu menu-vertical menu-light menu-root" role="menu" aria-activedescendant="" tabindex="0">
-                                        <li class="menu-item" role="menuitem" aria-selected="false">
-                                            <a target=""href="/profile">
-                                                <div class="is-flex between-xs"><span>ACCOUNT</span><span></span></div>
-                                            </a>
-                                        </li>
-                                        <li class="menu-item" role="menuitem" aria-selected="false">
-                                            <a target=""href="/user_post">
-                                                <div class="is-flex between-xs"><span>POST NEWS</span><span></span></div>
-                                            </a>
-                                        </li>
-                                        <li class="menu-item" role="menuitem" aria-selected="false">
-                                            <a target=""href="/following">
-                                                <div id="following" class="is-flex between-xs"><span>FOLLOWING</span><span>6</span></div>
-                                            </a>
-                                        </li>
-                                        <li class="menu-item" role="menuitem" aria-selected="false">
-                                            <a target=""href="/follower">
-                                                <div id="follower" class="is-flex between-xs"><span>FOLLOWER</span><span>5</span></div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <ul class="menu menu-vertical user-nav-collection menu-light menu-root" role="menu"
-                                        aria-activedescendant="" tabindex="0">
-                                        <li class="menu-item" role="menuitem" aria-selected="false">
-                                            <a target="_blank" href="#"><span>COLLECTION</span></a>
-                                        </li>
-                                    </ul>
+                                <div class="user-profile-main">
+                                    <div class="user-profile-main-screen-name">YoungYang</div>
+                                    <div class="user-profile-main-stats user-profile-main-item">
+                                        <svg class="symbol symbol-dig user-profile-main-stats-icon">
+                                            <use xlink:href="#symbol-dig"></use>
+                                        </svg>
+                                        Earned 10 likes
+                                    </div>
+                                    <div class="user-profile-main-stats user-profile-main-item">
+                                        <svg class="symbol symbol-diamond user-profile-main-stats-icon">
+                                            <use xlink:href="#symbol-diamond"></use>
+                                        </svg>
+                                        Get 0 forwards
+                                    </div>
+                                    <div class="user-profile-main-brief">stay hungry，stay foolish</div>
                                 </div>
+                            </div>
+                            <div>
+                                <ul class="menu menu-vertical menu-light menu-root" role="menu" aria-activedescendant=""
+                                    tabindex="0">
+                                    <li class="menu-item" role="menuitem" aria-selected="false">
+                                        <a target="" href="/profile">
+                                            <div class="is-flex between-xs"><span>ACCOUNT</span><span></span></div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item" role="menuitem" aria-selected="false">
+                                        <a target="" href="/user_post">
+                                            <div class="is-flex between-xs"><span>POST NEWS</span><span></span></div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item" role="menuitem" aria-selected="false">
+                                        <a target="" href="/following">
+                                            <div id="following" class="is-flex between-xs">
+                                                <span>FOLLOWING</span><span>6</span></div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item" role="menuitem" aria-selected="false">
+                                        <a target="" href="/follower">
+                                            <div id="follower" class="is-flex between-xs">
+                                                <span>FOLLOWER</span><span>5</span></div>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul class="menu menu-vertical user-nav-collection menu-light menu-root" role="menu"
+                                    aria-activedescendant="" tabindex="0">
+                                    <li class="menu-item" role="menuitem" aria-selected="false">
+                                        <a target="_blank" href="#"><span>COLLECTION</span></a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="col col-xs  feed-main">
@@ -230,6 +245,7 @@
                             <div class="post-creator">
                                 <div class="post-creator-body">
                                     <div class="content-wrap"><textarea placeholder="" class="input"
+                                                                        id="post-input"
                                                                         style="height: 63px; min-height: 63px; max-height: 252px; overflow-y: hidden;"></textarea>
                                     </div>
                                     <div class="operation-wrap"><input type="file" accept="image/*" multiple="">
@@ -254,8 +270,8 @@
                                             </button>
                                         </div>
                                         <div>
-                                            <button class="btn btn-primary btn-disabled"
-                                                    disabled="">Publish
+                                            <button class="btn btn-primary" id="publish">
+                                                Publish
                                             </button>
                                         </div>
                                     </div>
@@ -276,63 +292,60 @@
                             </div>
                         </div>
                         <div class="row column  message-feed">
-                            <div>
-
-                            </div>
                         </div>
                     </div>
                     <div class="col show-lg feed-right">
                         <div offset="61" style="width: 250px; height: 318px;">
-                                <div class="affix" style="position: fixed; top: 61px; left: 1069.6px; width: 250px;">
-                                    <div class="topic-list">
-                                        <p class="topic-list-title">Recommended Attention</p>
-                                        <div class="topic-card is-small">
-                                            <div class="topic-card-header is-flex"><img class="topic-card-thumbnail"
-                                                    src="../static/avatar/1.png">
-                                                <div class="topic-card-info">
-                                                    <h1 class="topic-card-title">Youth</h1>
-                                                    <p class="topic-card-extra">709 followers</p>
-                                                </div>
+                            <div class="affix" style="position: fixed; top: 61px; left: 1069.6px; width: 250px;">
+                                <div class="topic-list">
+                                    <p class="topic-list-title">Recommended Attention</p>
+                                    <div class="topic-card is-small">
+                                        <div class="topic-card-header is-flex"><img class="topic-card-thumbnail"
+                                                                                    src="../static/avatar/1.png">
+                                            <div class="topic-card-info">
+                                                <h1 class="topic-card-title">Youth</h1>
+                                                <p class="topic-card-extra">709 followers</p>
                                             </div>
                                         </div>
-                                        <div class="topic-card is-small">
-                                            <div class="topic-card-header is-flex"><img class="topic-card-thumbnail"
-                                                    src="../static/avatar/2.jpg">
-                                                <div class="topic-card-info">
-                                                    <h1 class="topic-card-title">Morso</h1>
-                                                    <p class="topic-card-extra">4,620 followers</p>
-                                                </div>
+                                    </div>
+                                    <div class="topic-card is-small">
+                                        <div class="topic-card-header is-flex"><img class="topic-card-thumbnail"
+                                                                                    src="../static/avatar/2.jpg">
+                                            <div class="topic-card-info">
+                                                <h1 class="topic-card-title">Morso</h1>
+                                                <p class="topic-card-extra">4,620 followers</p>
                                             </div>
                                         </div>
-                                        <div class="topic-card is-small">
-                                            <div class="topic-card-header is-flex"><img class="topic-card-thumbnail"
-                                                    src="../static/avatar/3.jpg">
-                                                <div class="topic-card-info">
-                                                    <h1 class="topic-card-title">East China Normal University</h1>
-                                                    <p class="topic-card-extra">1,505 followers</p>
-                                                </div>
+                                    </div>
+                                    <div class="topic-card is-small">
+                                        <div class="topic-card-header is-flex"><img class="topic-card-thumbnail"
+                                                                                    src="../static/avatar/3.jpg">
+                                            <div class="topic-card-info">
+                                                <h1 class="topic-card-title">East China Normal University</h1>
+                                                <p class="topic-card-extra">1,505 followers</p>
                                             </div>
                                         </div>
-                                        <div class="topic-card is-small">
-                                            <div class="topic-card-header is-flex"><img class="topic-card-thumbnail"
-                                                    src="../static/avatar/4.jpg">
-                                                <div class="topic-card-info">
-                                                    <h1 class="topic-card-title">派大涛_</h1>
-                                                    <p class="topic-card-extra">31,038 followers</p>
-                                                </div>
+                                    </div>
+                                    <div class="topic-card is-small">
+                                        <div class="topic-card-header is-flex"><img class="topic-card-thumbnail"
+                                                                                    src="../static/avatar/4.jpg">
+                                            <div class="topic-card-info">
+                                                <h1 class="topic-card-title">派大涛_</h1>
+                                                <p class="topic-card-extra">31,038 followers</p>
                                             </div>
                                         </div>
-                                        <div class="topic-card is-small">
-                                            <div class="topic-card-header is-flex"><img class="topic-card-thumbnail"
-                                                    src="../static/avatar/5.jpg">
-                                                <div class="topic-card-info">
-                                                    <h1 class="topic-card-title">纳骨小鸟 </h1>
-                                                    <p class="topic-card-extra">7,232 followers</p>
-                                                </div>
+                                    </div>
+                                    <div class="topic-card is-small">
+                                        <div class="topic-card-header is-flex"><img class="topic-card-thumbnail"
+                                                                                    src="../static/avatar/5.jpg">
+                                            <div class="topic-card-info">
+                                                <h1 class="topic-card-title">纳骨小鸟 </h1>
+                                                <p class="topic-card-extra">7,232 followers</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -341,5 +354,6 @@
     </div>
 </div>
 </body>
+<script src="../static/js/csrf.js"></script>
 <script src="../static/js/index.js"></script>
 </html>

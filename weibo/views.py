@@ -36,6 +36,7 @@ def post_view(request):
     else:
         return render(request, 'home.html')
 
+
 def following_view(request):
     if request.user.is_authenticated:
         return render(request, 'userFollow.html')
@@ -130,7 +131,7 @@ def profile_view(request):
 def logout_view(request):
     if request.user.is_authenticated:
         auth.logout(request)
-        return redirect('/entrance')
+        return redirect('/')
     else:
         return redirect(current_url)
 
@@ -141,6 +142,7 @@ def sign_in(request):
 
 def sign_up(request):
     return landing_view(request, status=1)
+
 
 class MyProfile(generics.ListAPIView):
     queryset = User.objects.all()
@@ -164,7 +166,7 @@ class MyProfile(generics.ListAPIView):
             'status': status.HTTP_200_OK,
             'data': new_dict
         })
-      
+
 
 class PostUser(generics.ListAPIView):
     queryset = Post.objects.all()
@@ -203,8 +205,11 @@ class PostAdd(generics.CreateAPIView):
         post = Post.objects.create(content=content, datetime=datetime)
         post.user.add(user)
         Liked.objects.create(user=user, post=post)
+        queryset = Post.objects.all().order_by('-datetime')
+        serializer = PostSerializer(queryset, many=True)
         return Response({
-            'status': status.HTTP_201_CREATED
+            'status': status.HTTP_201_CREATED,
+            'data': serializer.data
         })
 
 

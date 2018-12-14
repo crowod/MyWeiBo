@@ -22,11 +22,51 @@
             data: '',
             success: function (result) {
                 if (result['status'] === 200) {
-                    for (var i in result['data']) {
-                        var date = new Date(result['data'][i]['datetime']);
-                        date = date.getFullYear() + '/' + date.getMonth() + '/' + date.getDay();
-                        $('.message-feed').append(
-                            $(`<div class="message-card-container">
+                    posts_update(result)
+                }
+            }
+        })
+    });
+
+    $('#publish').on('click', function () {
+        var username = document.querySelector('.user-profile-main-screen-name').innerText;
+        var content = document.querySelector("#post-input").value;
+        var data = new URLSearchParams();
+        data.append('username', username);
+        data.append('content', content);
+
+        $.ajax({
+            url: '/posts/add',
+            type: 'POST',
+            data: data.toString(),
+            success: function (result) {
+                if (result['status'] === 201) {
+                    $('.app-container .app-container').prepend(
+                        $(`<div class="alert alert-success">
+                        <strong>Success</strong>
+                        </div>`)
+                    );
+                    document.querySelector("#post-input").value = "";
+                    $('.message-feed .message-card-container').each(function () {
+                        $(this).remove();
+                    });
+                    posts_update(result);
+                    window.setTimeout(function () {
+                        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                            $(this).remove();
+                        });
+                    }, 2000);
+                }
+            }
+        })
+    });
+
+    function posts_update(result) {
+        for (var i in result['data']) {
+            var date = new Date(result['data'][i]['datetime']);
+            date = date.getFullYear() + '/' + date.getMonth() + '/' + date.getDay();
+            $('.message-feed').append(
+                $(`<div class="message-card-container">
 <div class="message-card">
 <div class="message-card-header is-flex">
 <div class="message-card-header-left">
@@ -61,48 +101,19 @@
 <a><svg class="symbol symbol-dig"><use xlink:href="#symbol-dig"></use></svg>${result['data'][i]['total_liked']}</a>
 </div>
 <div class="op-item ">
-<a><svg class="symbol symbol-comment"><use xlink:href="#symbol-comment"></use></svg></a>
+<a><svg class="symbol symbol-comment"><use xlink:href="#symbol-comment"></use></svg>0</a>
 </div>
 <div class="op-item ">
-<a><svg class="symbol symbol-repost"><use xlink:href="#symbol-repost"></use></svg></a>
+<a><svg class="symbol symbol-repost"><use xlink:href="#symbol-repost"></use></svg>0</a>
 </div>
 </div>
 </div>
 </div>
 </div>`)
-                        )
-                    }
-
-
-                }
-            }
-        })
-    });
-
-    $('#publish').on('click', function () {
-        var username = document.querySelector('.user-profile-main-screen-name').innerText;
-        var content = document.querySelector("#post-input").value;
-        var data = new URLSearchParams();
-        data.append('username', username);
-        data.append('content', content);
-
-        $.ajax({
-            url: '/posts/add',
-            type: 'POST',
-            data: data.toString(),
-            headers: {'X-CSRFToken': document.cookie.split('=')[1]},
-            success: function (result) {
-                if (result['status'] === 201) {
-                    document.querySelector("#post-input").value = ""
-                }
-            }
-        })
-    });
-    window.setTimeout(function () {
-        $(".alert").fadeTo(500, 0).slideUp(500, function () {
-            $(this).remove();
-        });
-    }, 2000);
-})(jQuery);
+            )
+        }
+    }
+})
+(jQuery);
 
 
