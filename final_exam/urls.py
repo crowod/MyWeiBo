@@ -27,7 +27,7 @@ urlpatterns = [
     path('profile', views.profile_view),
     path('logout', views.logout_view),
     path('user_post',views.post_view),
-
+    path('users/me', views.MyProfile.as_view()),
     path('users/search', views.UserSearch.as_view()),
     path('posts/all', views.PostList.as_view()),
     path('posts/add', views.PostAdd.as_view()),
@@ -38,9 +38,8 @@ urlpatterns = [
     path('<str:username>/following', views.FollowingList.as_view()),
     path('following/add', views.FollowingAdd.as_view()),
     path('following/cancel', views.FollowingCancel.as_view()),
-
-    path('following',views.following_view),
-    path('follower',views.follower_view),
+    path('following', views.following_view),
+    path('follower', views.follower_view),
     path('comments/all', views.CommentList.as_view()),
     path('comments/add', views.CommentAdd.as_view()),
     path('comments/delete', views.CommentDelete.as_view()),
