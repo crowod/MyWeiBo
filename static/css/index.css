@@ -35,3 +35,11 @@ body, html {
 svg:not(:root), symbol, image, marker, pattern, foreignObject {
     overflow: hidden;
 }
+
+.alert-success {
+    position: absolute;
+    z-index: 999;
+    top: 0;
+    width: 100%;
+    text-align: center;
+}

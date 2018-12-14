@@ -12,6 +12,7 @@ function passwordValidation() {
     let btn = document.getElementById("updateButton");
 
     if (old_pw.length < 6) {
+        error_msg.innerText = "Old password too short!";
         error_msg.innerText = "Previous password too short!";
         error_msg.style.display = "block";
     } else if (new_pw.length < 6) {

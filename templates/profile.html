@@ -238,11 +238,12 @@
                                                 <div class="my_line"></div>
                                                 <form>   
                                                     <p>Username</p>
-                                                    <input type="text" value="{{ form.username }}" readonly="readonly">
+                                                    <input type="text" value="{{ user.username }}" readonly="readonly">
                                                     <p>Email Address</p>
-                                                    <input type="text" value="{{ form.email }}" readonly="readonly">
+                                                    <input type="text" value="{{ user.email }}" readonly="readonly">
                                                     <p>Register Date</p>
-                                                    <input type="text" value="{{ form.register_date }}" readonly="readonly">
+                                                    <input type="text" value="{{ user.date_joined|date:"Y-m-d H:i:s"}}"
+                                                           readonly="readonly">
                                                     <p>Last Login</p>
                                                     <input type="text" value="{{ form.last_login }}" readonly="readonly">
                                                     <p></p>
