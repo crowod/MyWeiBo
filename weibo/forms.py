@@ -1,7 +1,7 @@
 import re
 
 from django import forms
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, validate_email
 
 from weibo.models import User
 
@@ -13,6 +13,14 @@ class LoginForm(forms.Form):
 
     def clean_email_sign_in(self):
         email = self.cleaned_data['email_sign_in']
+        if re.search(r'^([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)', email):
+            if re.search('[A-Z]+', email):
+                raise forms.ValidationError('Enter a valid email address.')
+                return email
+        elif re.search('^[^a-z0-9_-]*$', email):
+            raise forms.ValidationError('Enter a valid username.')
+            return email
+
         have_email = User.objects.filter(email=email).count()
         have_username = User.objects.filter(username=email).count()
         if have_email == 0 and have_username == 0:
