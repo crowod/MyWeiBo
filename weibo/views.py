@@ -100,8 +100,9 @@ def profile_view(request):
         else:
             profile_form = ProfileForm()
             username = user.username
+            user = User.objects.get(username=username)
             return render(request, "profile.html", {"profile_form": profile_form,
-                                                    "username": username})
+                                                    "user": user})
     else:
         return redirect('/entrance')
 
@@ -136,11 +137,13 @@ class MyProfile(generics.ListAPIView):
         queryset = FollowShip.objects.filter(follower__username=username)
         serializer_following = FollowShipSerializer(queryset, many=True)
         following_num = len([x.get('following_user') for x in serializer_following.data])
-        serializer.data.update({'following_num': following_num,
-                                'follower_num': follower_num})
+        new_dict = {'following_num': following_num,
+                    'follower_num': follower_num}
+        new_dict.update(serializer.data)
+        new_dict.pop('id')
         return Response({
             'status': status.HTTP_200_OK,
-            'data': serializer.data
+            'data': new_dict
         })
 
 
@@ -150,7 +153,7 @@ class PostUser(generics.ListAPIView):
     lookup_field = 'user'
 
     def get(self, request, *args, **kwargs):
-        queryset = Post.objects.filter(user__username=kwargs['name']).order_by('datetime')
+        queryset = Post.objects.filter(user__username=kwargs['name']).order_by('-datetime')
         serializer = PostSerializer(queryset, many=True)
         queryset_liked = Liked.objects.filter(user__username=kwargs['name'])
         serializer_liked = LikedSerializer(queryset_liked, many=True)
@@ -206,7 +209,7 @@ class PostList(generics.ListAPIView):
     serializer_class = PostSerializer
 
     def get(self, request, *args, **kwargs):
-        queryset = Post.objects.all().order_by('datetime')
+        queryset = Post.objects.all().order_by('-datetime')
         serializer = PostSerializer(queryset, many=True)
         if serializer:
             return Response({

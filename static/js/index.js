@@ -1,6 +1,22 @@
 (function ($) {
     $(document).ready(function () {
         $.ajax({
+            url: '/users/me',
+            type: 'GET',
+            data: '',
+            success: function (result) {
+                if (result['status'] === 200) {
+                    document.querySelector('.user-profile-main-screen-name').innerHTML = result['data']['username'];
+                    document.querySelector('#following > span:nth-child(2)').innerHTML = result['data']['following_num'];
+                    document.querySelector('#follower > span:nth-child(2)').innerHTML = result['data']['follower_num'];
+                }
+
+            }
+        })
+    });
+
+    $(document).ready(function () {
+        $.ajax({
             url: '/posts/all',
             type: 'GET',
             data: '',
@@ -13,7 +29,9 @@
                             $(`<div class="message-card-container">
 <div class="message-card">
 <div class="message-card-header is-flex">
-<div class="message-card-header-left"></div>
+<div class="message-card-header-left">
+<img class="message-card-topic-img" src="../static/image/avatar.png">
+</div>
 <div class="message-card-header-main">
 <h1 class="topic-name">
 <span>${result['data'][i]['user'][0]['username']}</span>
