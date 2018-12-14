@@ -236,7 +236,7 @@
                                             <div class="user-card-info profile_button" >
                                                 <h2 class="user-profile-main-screen-name"style="text-align: center">ACCOUNT</h2>
                                                 <div class="my_line"></div>
-                                                <form>   
+                                                <form>
                                                     <p>Username</p>
                                                     <input type="text" value="{{ user.username }}" readonly="readonly">
                                                     <p>Email Address</p>
@@ -244,8 +244,6 @@
                                                     <p>Register Date</p>
                                                     <input type="text" value="{{ user.date_joined|date:"Y-m-d H:i:s"}}"
                                                            readonly="readonly">
-                                                    <p>Last Login</p>
-                                                    <input type="text" value="{{ form.last_login }}" readonly="readonly">
                                                     <p></p>
                                                 </form>
                                                 <div class="my_line"></div>
@@ -261,11 +259,11 @@
                                                 <h2 class="user-profile-main-screen-name">UPDATE PASSWORD</h2>
                                                 <div class="my_line"></div>
                                                 <div id="error_msg" class="error_msg"></div>
-                                                <form id="updateForm" action="/update" method="post">
+                                                <form id="updateForm" action="/profile" method="post">
                                                     {% csrf_token %}
-                                                    <input id="old_password" type="password" name="old_password" placeholder="Previous Password">
-                                                    <input id="new_password" type="password" name="new_password" placeholder="New Password">
-                                                    <input id="password_cfm" type="password" name="password_cfm" placeholder="Repeat Password">
+                                                    {{ profile_form.password_profile_old }}
+                                                    {{ profile_form.password_profile_new }}
+                                                    {{ profile_form.password_cfm_profile_new }}
                                                 </form>
                                                 <div class="my_line"></div>
                                                 <button class="button_update" form="updateForm" onclick="passwordValidation()">UPDATE</button>     

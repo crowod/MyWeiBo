@@ -104,13 +104,17 @@ def profile_view(request):
     if request.user.is_authenticated:
         user = User.objects.get(email=request.user.email)
         if request.method == "POST":
-            forms.user = user
             profile_form = ProfileForm(request.POST)
             if profile_form.is_valid():
-                email = profile_form.cleaned_data['email_profile']
                 password = profile_form.cleaned_data['password_profile_new']
                 username = user.username
-                User.objects.filter(username=username).update(email=email, password=password)
+                user = User.objects.get(username=username)
+                password_old = profile_form.cleaned_data['password_profile_old']
+                if user.check_password(password_old) is False:
+                    raise forms.ValidationError('invalid password.')
+                else:
+                    user.set_password(password)
+                    user.save()
                 return render(request, "profile.html", {"profile_form": profile_form,
                                                         "success_msg": "Update successfully!",
                                                         "username": username})
