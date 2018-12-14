@@ -36,7 +36,6 @@ def post_view(request):
     else:
         return render(request, 'home.html')
 
-
 def following_view(request):
     if request.user.is_authenticated:
         return render(request, 'userFollow.html')
@@ -143,7 +142,6 @@ def sign_in(request):
 def sign_up(request):
     return landing_view(request, status=1)
 
-
 class MyProfile(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -166,7 +164,7 @@ class MyProfile(generics.ListAPIView):
             'status': status.HTTP_200_OK,
             'data': new_dict
         })
-
+      
 
 class PostUser(generics.ListAPIView):
     queryset = Post.objects.all()

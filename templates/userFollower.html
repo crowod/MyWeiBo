@@ -123,7 +123,7 @@
                                     <div class="row start-xs">
                                         <div class="col col-xs ">
                                             <div class="row no-margin middle-xs brand">
-                                                <a href="#">
+                                                <a href="/">
                                                     <img class="brand-logo" src="../static/image/social-weibo.svg" href=""><span class="brand-name">WeiBo</span>
                                                 </a>
                                             </div>
@@ -146,22 +146,19 @@
                                 </div>
                                 <div class="col col-xs  site-header-right">
                                     <div class="row no-margin end-xs middle-xs is-flex middle-xs">
-                                        <a class="header-item hidden-xs"href="">Home</a>
+                                        <a class="header-item hidden-xs"href="/">Home</a>
                                         <div class="user-info header-item dropdown-trigger">
                                             <div class="user-avatar ">
                                                 <div class="user-avatar-content" style="background-image: url(&quot;../static/image/avatar.png&quot;);"></div>
                                             </div>
                                         </div>
-                                        <span class="header-item header-item-icon">
-                                            <svg class="symbol symbol-email">
-                                                <use xlink:href="#symbol-email"></use>
-                                            </svg>
-                                        </span>
-                                        <span class="header-item header-item-icon hidden-xs">
-                                            <svg class="symbol symbol-pencil">
-                                                <use xlink:href="#symbol-pencil"></use>
-                                            </svg>
-                                        </span>
+                                        <a href="/logout">
+                                            <span class="header-item header-item-icon hidden-xs" >
+                                                    <svg class="symbol symbol-poweroff" >
+                                                        <use xlink:href="#symbol-poweroff"></use>
+                                                    </svg>
+                                            </span>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -197,18 +194,23 @@
                                         <div>
                                             <ul class="menu menu-vertical menu-light menu-root" role="menu" aria-activedescendant="" tabindex="0">
                                                 <li class="menu-item" role="menuitem" aria-selected="false">
-                                                    <a target=""href="#">
+                                                    <a target=""href="/profile">
+                                                        <div class="is-flex between-xs"><span>ACCOUNT</span><span></span></div>
+                                                    </a>
+                                                </li>
+                                                <li class="menu-item" role="menuitem" aria-selected="false">
+                                                    <a target=""href="/user_post">
                                                         <div class="is-flex between-xs"><span>POST NEWS</span><span></span></div>
                                                     </a>
                                                 </li>
                                                 <li class="menu-item" role="menuitem" aria-selected="false">
-                                                    <a target=""href="#">
-                                                        <div class="is-flex between-xs"><span>FOLLOWING</span><span>6</span></div>
+                                                    <a target=""href="/following">
+                                                        <div id="following" class="is-flex between-xs"><span>FOLLOWING</span><span>6</span></div>
                                                     </a>
                                                 </li>
                                                 <li class="menu-item" role="menuitem" aria-selected="false">
-                                                    <a target=""href="#" class="is-active">
-                                                        <div class="is-flex between-xs"><span>FOLLOWER</span><span>5</span></div>
+                                                    <a target=""href="/follower" class="is-active">
+                                                        <div id="follower" class="is-flex between-xs"><span>FOLLOWER</span><span>5</span></div>
                                                     </a>
                                                 </li>
                                             </ul>
