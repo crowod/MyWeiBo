@@ -115,23 +115,27 @@ def profile_view(request):
                     username = user.username
                     user = User.objects.get(username=username)
                     return render(request, "profile.html", {"profile_form": profile_form,
-                                                            "user": user})
+                                                            "user": user,
+                                                            "status": 1})
                 else:
                     user.set_password(password)
                     user.save()
                 return render(request, "profile.html", {"profile_form": profile_form,
                                                         "success_msg": "Update successfully!",
-                                                        "username": username})
+                                                        "user": user,
+                                                        "status": 1})
             else:
                 return render(request, "profile.html", {"error": profile_form.errors,
                                                         "profile_form": profile_form,
-                                                        "username": ""})
+                                                        "user": user,
+                                                        "status": 1})
         else:
             profile_form = ProfileForm()
             username = user.username
             user = User.objects.get(username=username)
             return render(request, "profile.html", {"profile_form": profile_form,
-                                                    "user": user})
+                                                    "user": user,
+                                                    "status": 0})
     else:
         return redirect('/entrance')
 
