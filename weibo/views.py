@@ -216,7 +216,7 @@ class PostDelete(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         post_id = request.data['post_id']
-        username = request.data['username']
+        username = request.user.username
         user = User.objects.get(username=username)
         Liked.objects.get(user=user, post_id=post_id).delete()
         Post.objects.get(user=user, id=post_id).delete()
@@ -248,7 +248,7 @@ class PostLiked(generics.CreateAPIView):
     serializer_class = LikedSerializer
 
     def post(self, request, *args, **kwargs):
-        username = request.data['username']
+        username = request.user.username
         post_id = request.data['post_id']
         is_liked = request.data['is_liked']
         user = User.objects.get(username=username)
@@ -309,7 +309,7 @@ class FollowingAdd(generics.CreateAPIView):
     serializer_class = FollowShipSerializer
 
     def post(self, request, *args, **kwargs):
-        username = request.data['username']
+        username = request.user.username
         following_name = request.data['following_name']
         user = User.objects.get(username=username)
         following = User.objects.get(username=following_name)
@@ -329,7 +329,7 @@ class FollowingCancel(generics.CreateAPIView):
     serializer_class = FollowShipSerializer
 
     def post(self, request, *args, **kwargs):
-        username = request.data['username']
+        username = request.user.username
         following_name = request.data['following_name']
         user = User.objects.get(username=username)
         following = User.objects.get(username=following_name)
@@ -364,7 +364,7 @@ class CommentAdd(generics.CreateAPIView):
     serializer_class = CommentSerializer
 
     def post(self, request, *args, **kwargs):
-        username = request.data['username']
+        username = request.user.username
         post_id = request.data['post_id']
         content = request.data['content']
         datetime = timezone.now()
