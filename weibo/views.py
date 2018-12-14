@@ -111,7 +111,11 @@ def profile_view(request):
                 user = User.objects.get(username=username)
                 password_old = profile_form.cleaned_data['password_profile_old']
                 if user.check_password(password_old) is False:
-                    raise forms.ValidationError('invalid password.')
+                    profile_form.add_error('password_profile_old', 'invalid old password')
+                    username = user.username
+                    user = User.objects.get(username=username)
+                    return render(request, "profile.html", {"profile_form": profile_form,
+                                                            "user": user})
                 else:
                     user.set_password(password)
                     user.save()
