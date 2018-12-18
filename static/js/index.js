@@ -5,11 +5,9 @@
             type: 'GET',
             data: '',
             success: function (result) {
-                if (result['status'] === 200) {
-                    document.querySelector('.user-profile-main-screen-name').innerHTML = result['data']['username'];
-                    document.querySelector('#following > span:nth-child(2)').innerHTML = result['data']['following_num'];
-                    document.querySelector('#follower > span:nth-child(2)').innerHTML = result['data']['follower_num'];
-                }
+                document.querySelector('.user-profile-main-screen-name').innerHTML = result['data']['username'];
+                document.querySelector('#following > span:nth-child(2)').innerHTML = result['data']['following_num'];
+                document.querySelector('#follower > span:nth-child(2)').innerHTML = result['data']['follower_num'];
 
             }
         })
@@ -21,9 +19,7 @@
             type: 'GET',
             data: '',
             success: function (result) {
-                if (result['status'] === 200) {
-                    posts_update(result)
-                }
+                posts_update(result)
             }
         })
     });

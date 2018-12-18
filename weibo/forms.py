@@ -17,7 +17,7 @@ class LoginForm(forms.Form):
             if re.search('[A-Z]+', email):
                 raise forms.ValidationError('Enter a valid email address.')
                 return email
-        elif re.search('^[^a-z0-9_-]*$', email):
+        elif re.search(r'^[^a-z0-9_-]*$', email):
             raise forms.ValidationError('Enter a valid username.')
             return email
 
@@ -36,7 +36,7 @@ class RegisterForm(forms.Form):
     username_sign_up = forms.CharField(required=True,
                                        validators=[
                                            RegexValidator(
-                                               regex='^[a-z0-9_-]*$',
+                                               regex=r'^[a-z0-9_-]*$',
                                                message='username has illegal characters.',
                                                code='invalid_username'
                                            ),
@@ -47,7 +47,7 @@ class RegisterForm(forms.Form):
 
     def clean_email_sign_up(self):
         email = self.cleaned_data['email_sign_up']
-        if re.search('[A-Z]+', email):
+        if re.search(r'[A-Z]+', email):
             raise forms.ValidationError('email has illegal characters')
         have_email = User.objects.filter(email=email).count()
         if have_email:

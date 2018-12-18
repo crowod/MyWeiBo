@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from weibo.models import User, Post, Liked, FollowShip, Collection
+from weibo.models import User, Post, Like, FollowShip, Collection
+from functools import reduce
 
 
 class FollowShipSerializer(serializers.ModelSerializer):
@@ -18,16 +19,42 @@ class FollowShipSerializer(serializers.ModelSerializer):
         return UserSerializer(User.objects.get(id=obj.follower_id)).data
 
 
-class LikedSerializer(serializers.ModelSerializer):
+class LikeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Liked
-        fields = ('is_liked', 'user', 'post')
+        model = Like
+        fields = ('is_like', 'user', 'post')
 
 
 class UserSerializer(serializers.ModelSerializer):
+    follower_num = serializers.SerializerMethodField()
+    following_num = serializers.SerializerMethodField()
+    likes_earn = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ('username', 'id')
+        fields = ('username', 'id', 'follower_num', 'following_num', 'likes_earn')
+
+    def get_follower_num(self, obj):
+        return FollowShip.objects.filter(following_id=obj.id).count()
+
+    def get_following_num(self, obj):
+        return FollowShip.objects.filter(follower_id=obj.id).count()
+
+    def get_likes_earn(self, obj):
+        queryset = Post.objects.filter(user__id=obj.id)
+        return reduce(lambda x, y: x + y,
+                      map(lambda x:
+                          Like.objects.filter(post_id=x).filter(is_like=True).count(),
+                          map(lambda x: x.id, queryset)))
+
+    def delete_fields(self, *args, **kwargs):
+        fields = kwargs.get('fields')
+
+        if fields is not None:
+            forbidden = set(fields)
+            existing = set(self.fields.keys())
+            for field_name in forbidden:
+                self.fields.pop(field_name)
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -51,7 +78,7 @@ class PostSerializer(serializers.ModelSerializer):
         return Post.objects.create(**validated_data)
 
     def get_total_liked(self, obj):
-        return Liked.objects.filter(post__id=obj.id).filter(is_liked=True).count()
+        return Like.objects.filter(post__id=obj.id).filter(is_like=True).count()
 
 
 class CollectionSerializer(serializers.ModelSerializer):

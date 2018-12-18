@@ -40,10 +40,20 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
+class Image(models.Model):
+    SIZES = (
+        {'code': 'avatar', 'wxh': '125x125', 'resize': 'crop'},
+        {'code': 'm', 'wxh': '640x480', 'resize': 'scale'},
+        {'code': '150', 'wxh': '150x150'},  # 'resize' defaults to 'scale'
+    )
+    image = ImageThumbsField(upload_to='media', sizes=SIZES)
+
+
 class User(AbstractUser):
     username = models.CharField('Username', max_length=30, unique=True)
     email = models.EmailField('Email address', unique=True)
     password = models.CharField(max_length=16)
+    avatar = models.ForeignKey(Image, on_delete=models.CASCADE)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
     objects = UserManager()
@@ -67,19 +77,10 @@ class FollowShip(models.Model):
     following = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
 
 
-class Liked(models.Model):
+class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    is_liked = models.BooleanField(default=False)
-
-
-class Image(models.Model):
-    SIZES = (
-        {'code': 'avatar', 'wxh': '125x125', 'resize': 'crop'},
-        {'code': 'm', 'wxh': '640x480', 'resize': 'scale'},
-        {'code': '150', 'wxh': '150x150'},  # 'resize' defaults to 'scale'
-    )
-    image = ImageThumbsField(upload_to='media', sizes=SIZES)
+    is_like = models.BooleanField(default=False)
 
 
 class Collection(models.Model):

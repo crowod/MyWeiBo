@@ -13,16 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
-from django.views.static import serve
 
-from final_exam import settings
 from weibo import views
 
 urlpatterns = [
-    url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
     path('admin/', admin.site.urls),
     path('', views.index_view),
     path('sign_in', views.sign_in),
@@ -33,19 +29,21 @@ urlpatterns = [
     path('user_post', views.post_view),
     path('users/me', views.MyProfile.as_view()),
     path('users/search', views.UserSearch.as_view()),
+    path('users/<str:username>', views.UserProfile.as_view()),
     path('posts/all', views.PostList.as_view()),
     path('posts/add', views.PostAdd.as_view()),
     path('posts/delete', views.PostDelete.as_view()),
     path('posts/search', views.PostSearch.as_view()),
     path('posts/<str:name>', views.PostUser.as_view()),
-    path('<str:username>/followers', views.FollowerList.as_view()),
-    path('<str:username>/following', views.FollowingList.as_view()),
     path('following/add', views.FollowingAdd.as_view()),
     path('following/cancel', views.FollowingCancel.as_view()),
     path('following', views.following_view),
     path('follower', views.follower_view),
+    path('<str:username>/followers', views.FollowerList.as_view()),
+    path('<str:username>/following', views.FollowingList.as_view()),
     path('comments/all', views.CommentList.as_view()),
     path('comments/add', views.CommentAdd.as_view()),
     path('comments/delete', views.CommentDelete.as_view()),
-    path('liked', views.PostLiked.as_view())
+    path('like', views.PostLiked.as_view()),
+    path('image', views.test)
 ]
