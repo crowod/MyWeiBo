@@ -41,21 +41,11 @@
             data: data.toString(),
             success: function (result) {
                 if (result['status'] === 201) {
-                    $('.app-container .app-container').prepend(
-                        $(`<div class="alert alert-success">
-                        <strong>Success</strong>
-                        </div>`)
-                    );
                     document.querySelector("#post-input").value = "";
                     $('.message-feed .message-card-container').each(function () {
                         $(this).remove();
                     });
                     posts_update(result);
-                    window.setTimeout(function () {
-                        $(".alert").fadeTo(500, 0).slideUp(500, function () {
-                            $(this).remove();
-                        });
-                    }, 2000);
                 }
             }
         })
@@ -66,50 +56,49 @@
             var date = new Date(result['data'][i]['datetime']);
             date = date.getFullYear() + '/' + date.getMonth() + '/' + date.getDay();
             $('.message-feed').append(
-                $(`<div class="message-card-container">
-<div class="message-card">
-<div class="message-card-header is-flex">
-<div class="message-card-header-left">
-<img class="message-card-topic-img" src="../static/image/avatar.png">
-</div>
-<div class="message-card-header-main">
-<h1 class="topic-name">
-<span>${result['data'][i]['user'][0]['username']}</span>
-</h1>
-<p class="topic-extra">
-<span class="message-time">${date}</span>
-</p>
-</div>
-<div class="message-card-header-right">
-<svg class="symbol symbol-chevron-down dropdown-trigger"><use xlink:href="#symbol-chevron-down"></use></svg>
-</div>
-</div>
-<div class="message-card-body">
-<div class="user-activity-content">
-<div class="user-activity-post">
-<div class="readable-content">
-<div class="readable-content-collapse">
-<span>${result['data'][i]['content']}</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="message-card-footer">
-<div class="op-wrap">
-<div class="op-item ">
-<a><svg class="symbol symbol-dig"><use xlink:href="#symbol-dig"></use></svg>${result['data'][i]['total_liked']}</a>
-</div>
-<div class="op-item ">
-<a><svg class="symbol symbol-comment"><use xlink:href="#symbol-comment"></use></svg>0</a>
-</div>
-<div class="op-item ">
-<a><svg class="symbol symbol-repost"><use xlink:href="#symbol-repost"></use></svg>0</a>
-</div>
-</div>
-</div>
-</div>
-</div>`)
+                $(
+                    `<div class="message-card-container">
+                    <div class="message-card">
+                    <div class="message-card-header is-flex">
+                    <div class="message-card-header-left">
+                    <img class="message-card-topic-img" src="../static/image/avatar.png">
+                    </div>
+                    <div class="message-card-header-main">
+                    <h1 class="topic-name">
+                    <span>${result['data'][i]['user'][0]['username']}</span>
+                    </h1>
+                    <p class="topic-extra">
+                    <span class="message-time">${date}</span>
+                    </p>
+                    </div>
+                    <div class="message-card-header-right">
+                    <svg class="symbol dropdown-trigger"><use xlink:href="#symbol-trash"></use></svg>
+                    </div>
+                    </div>
+                    <div class="message-card-body">
+                    <div class="user-activity-content">
+                    <div class="user-activity-post">
+                    <div class="readable-content">
+                    <div class="readable-content-collapse">
+                    <span>${result['data'][i]['content']}</span>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="message-card-footer">
+                    <div class="op-wrap">
+                    <div class="op-item ">
+                    <a><svg class="symbol symbol-dig"><use xlink:href="#symbol-dig"></use></svg>${result['data'][i]['total_liked']}</a>
+                    </div>
+                    <div class="op-item ">
+                    <a><svg class="symbol symbol-comment"><use xlink:href="#symbol-comment"></use></svg>0</a>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    </div>`
+                )
             )
         }
     }

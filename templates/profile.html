@@ -6,9 +6,7 @@
     <title>weibo</title>
     <link href="../static/css/style.css" rel="stylesheet">
     <link href="../static/css/profile.css" rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
     <script src="../static/js/jquery-3.3.1.min.js"></script>
-
 </head>
 
 <body class="page page-spa">
@@ -160,11 +158,11 @@
                                     </div>
                                 </div>
                                 <a href="/logout">
-                                            <span class="header-item header-item-icon hidden-xs">
-                                                    <svg class="symbol symbol-poweroff">
-                                                        <use xlink:href="#symbol-poweroff"></use>
-                                                    </svg>
-                                            </span>
+                                    <span class="header-item header-item-icon hidden-xs">
+                                            <svg class="symbol symbol-poweroff">
+                                                <use xlink:href="#symbol-poweroff"></use>
+                                            </svg>
+                                    </span>
                                 </a>
                             </div>
                         </div>
@@ -175,35 +173,43 @@
                 <div class="row  user-root center-xs">
                     <div class="col  user-left hidden-sm hidden-xs">
                         <div>
-                            <div class="user-nav" style="width: 250px;">
+                            <div class="affix" style="width: 250px;">
                                 <div class="user-profile">
                                     <div class="user-profile-background"
                                          style="background-image: url(&quot;../static/image/bg.png&quot;);"></div>
                                     <div class="user-profile-thumbnailUrl">
                                         <div class="user-avatar ">
-                                            <div class="user-avatar-content"
-                                                 style="background-image: url(&quot;../static/image/avatar.png&quot;);"></div>
+                                            <div class="user-avatar-content" id="MyImage">
+                                                <div class="user-avatar-content" id="penLayer" onclick="F_Open_dialog()">
+                                                    <input type="file"  id="fileInput" style="display:none" >
+                                                    <script>
+                                                        document.getElementById("fileInput").addEventListener("change", readFile, false);
+                                                        function readFile() {
+                                                            if (this.files && this.files[0]) {
+                                                                var FR= new FileReader();
+                                                                FR.onload = function(e) {
+                                                                    $('#MyImage').css('background-image', 'url(' + e.target.result + ')');
+                                                                };
+                                                                FR.readAsDataURL( this.files[0] );
+                                                            }
+                                                        }
+                                                    </script>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="user-profile-main">
                                         <div class="user-profile-main-screen-name">YoungYang</div>
                                         <div class="user-profile-main-stats user-profile-main-item">
-                                            <svg class="symbol symbol-dig user-profile-main-stats-icon">
-                                                <use xlink:href="#symbol-dig"></use>
-                                            </svg>
-                                            Earned 10 likes
-                                        </div>
-                                        <div class="user-profile-main-stats user-profile-main-item">
-                                            <svg class="symbol symbol-diamond user-profile-main-stats-icon">
-                                                <use xlink:href="#symbol-diamond"></use>
-                                            </svg>
-                                            Get 0 forwards
-                                        </div>
+                                        <svg class="symbol symbol-dig user-profile-main-stats-icon">
+                                            <use xlink:href="#symbol-dig"></use>
+                                        </svg>Earned 10 likes
+                                    </div>
                                         <div class="user-profile-main-brief">stay hungry，stay foolish</div>
                                     </div>
                                 </div>
                                 <div>
-                                    <ul class="menu menu-vertical menu-light menu-root" role="menu"
+                                    <ul class="menu menu-vertical user-nav-collection menu-light menu-root" role="menu"
                                         aria-activedescendant="" tabindex="0">
 
                                         <li class="menu-item" role="menuitem" aria-selected="false">
@@ -228,12 +234,6 @@
                                                 <div id="follower" class="is-flex between-xs">
                                                     <span>FOLLOWER</span><span>5</span></div>
                                             </a>
-                                        </li>
-                                    </ul>
-                                    <ul class="menu menu-vertical user-nav-collection menu-light menu-root" role="menu"
-                                        aria-activedescendant="" tabindex="0">
-                                        <li class="menu-item" role="menuitem" aria-selected="false">
-                                            <a target="_blank" href="#"><span>COLLECTION</span></a>
                                         </li>
                                     </ul>
                                 </div>
@@ -272,17 +272,18 @@
                                         <div class="user-card-info profile_button" style="text-align: center">
                                             <h2 class="user-profile-main-screen-name">UPDATE PASSWORD</h2>
                                             <div class="my_line"></div>
+                                            <div id="error_msg"></div>
                                             {% if profile_form.errors %}
                                                 {% for field in profile_form %}
                                                     {% for error in field.errors %}
                                                         <div class="alert alert-danger">
-                                                            <strong>{{ error|escape }}</strong>
+                                                            {{ error|escape }}
                                                         </div>
                                                     {% endfor %}
                                                 {% endfor %}
                                             {% endif %}
                                             <form id="updateForm" action="/profile" method="post">
-                                                <div id="error_msg"></div>
+
                                                 {% csrf_token %}
                                                 {% load widget_tweaks %}
                                                 {{ profile_form.password_profile_old|attr:"id:old_password" }}
