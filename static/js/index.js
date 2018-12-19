@@ -56,7 +56,9 @@
                     </div>
                     <div class="message-card-header-main">
                     <h1 class="topic-name">
+                    <a href="/${result['data'][i]['user'][0]['username']}/post">
                     <span>${result['data'][i]['user'][0]['username']}</span>
+                    </a>
                     </h1>
                     <p class="topic-extra">
                     <span class="message-time">${date}</span>

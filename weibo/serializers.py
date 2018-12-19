@@ -87,6 +87,15 @@ class PostSerializer(serializers.ModelSerializer):
     def get_total_liked(self, obj):
         return Like.objects.filter(post__id=obj.id).filter(is_like=True).count()
 
+    def delete_fields(self, *args, **kwargs):
+        fields = kwargs.get('fields')
+
+        if fields is not None:
+            forbidden = set(fields)
+            existing = set(self.fields.keys())
+            for field_name in forbidden:
+                self.fields.pop(field_name)
+
 
 class CollectionSerializer(serializers.ModelSerializer):
     posts = serializers.SerializerMethodField()
