@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    var username;
     $.ajax({
         url: '/users/me',
         type: 'GET',
@@ -8,24 +9,24 @@ $(document).ready(function () {
                 document.querySelector('.user-profile-main-screen-name').innerHTML = result['data']['username'];
                 document.querySelector('#following > span:nth-child(2)').innerHTML = result['data']['following_num'];
                 document.querySelector('#follower > span:nth-child(2)').innerHTML = result['data']['follower_num'];
+                username = document.querySelector('.user-profile-main-screen-name').innerHTML;
+                $.ajax({
+                    url: '/posts/' + username,
+                    type: 'GET',
+                    data: '',
+                    success: function (result) {
+                        if (result['status'] === 200) {
+                            posts_update(result)
+                        }
+                    }
+                })
             }
 
         }
     })
+
 });
 
-$(document).ready(function () {
-    $.ajax({
-        url: '/posts/wangyang',
-        type: 'GET',
-        data: '',
-        success: function (result) {
-            if (result['status'] === 200) {
-                posts_update(result)
-            }
-        }
-    })
-});
 
 function posts_update(result) {
         for (var i in result['data']) {
