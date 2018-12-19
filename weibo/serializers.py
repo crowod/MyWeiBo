@@ -29,10 +29,11 @@ class UserSerializer(serializers.ModelSerializer):
     follower_num = serializers.SerializerMethodField()
     following_num = serializers.SerializerMethodField()
     likes_earn = serializers.SerializerMethodField()
+    avatar_url = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ('username', 'id', 'follower_num', 'following_num', 'likes_earn', 'avatar')
+        fields = ('username', 'id', 'follower_num', 'following_num', 'likes_earn', 'avatar_url')
 
     def get_follower_num(self, obj):
         return FollowShip.objects.filter(following_id=obj.id).count()
@@ -49,6 +50,9 @@ class UserSerializer(serializers.ModelSerializer):
                               map(lambda x: x.id, queryset)))
         else:
             return 0
+
+    def get_avatar_url(self, obj):
+        return User.objects.get(id=obj.id).avatar.url_avatar
 
     def delete_fields(self, *args, **kwargs):
         fields = kwargs.get('fields')

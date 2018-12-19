@@ -489,3 +489,13 @@ class CollectionCancel(generics.CreateAPIView):
 class AvatarUpload(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         image = request.FILES['file']
+        username = request.user.username
+        user = User.objects.get(username=username)
+        user.avatar = image
+        user.save()
+        if user:
+            return Response({
+                'avatar_url': user.avatar.url_avatar
+            }, status=status.HTTP_201_CREATED)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)

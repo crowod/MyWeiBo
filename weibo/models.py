@@ -56,7 +56,7 @@ class User(AbstractUser):
     username = models.CharField('Username', max_length=30, unique=True)
     email = models.EmailField('Email address', unique=True)
     password = models.CharField(max_length=16)
-    avatar = ImageThumbsField(upload_to='user_avatar', sizes=SIZES, default='media/default.jpg')
+    avatar = ImageThumbsField(upload_to='avatar', sizes=SIZES, default='avatar/default.jpg')
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
     objects = UserManager()
@@ -69,7 +69,7 @@ class Comment(models.Model):
 
 
 class Post(models.Model):
-    content = models.CharField(max_length=300)
+    content = models.CharField(max_length=300, blank=False)
     datetime = models.DateTimeField(auto_now_add=True)
     comment = models.ManyToManyField(Comment)
     user = models.ManyToManyField(User)

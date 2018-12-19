@@ -64,7 +64,7 @@ function readFile() {
             contentType: false,
             data: data,
             success: function (result) {
-
+                $('#MyImage').css('background-image', `url(${result['avatar_url']})`);
             }
         })
     }
