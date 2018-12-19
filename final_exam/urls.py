@@ -21,7 +21,6 @@ from django.conf.urls.static import serve, static
 from weibo import views
 
 urlpatterns = [
-    url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}, name='static'),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}, name='media'),
     path('admin/', admin.site.urls),
     path('', views.index_view),
@@ -54,3 +53,6 @@ urlpatterns = [
     path('comments/delete', views.CommentDelete.as_view()),
     path('like', views.PostLike.as_view()),
 ]
+
+if settings.DEBUG is False:
+    urlpatterns.append(url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}, name='static'))
