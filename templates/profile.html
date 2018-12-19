@@ -180,31 +180,25 @@
                                     <div class="user-profile-thumbnailUrl">
                                         <div class="user-avatar ">
                                             <div class="user-avatar-content" id="MyImage">
-                                                <div class="user-avatar-content" id="penLayer" onclick="F_Open_dialog()">
-                                                    <input type="file" id="fileInput" style="display:none" >
-                                                    <script>
-                                                        document.getElementById("fileInput").addEventListener("change", readFile, false);
-                                                        function readFile() {
-                                                            if (this.files && this.files[0]) {
-                                                                var FR= new FileReader();
-                                                                FR.onload = function(e) {
-                                                                    $('#MyImage').css('background-image', 'url(' + e.target.result + ')');
-                                                                };
-                                                                FR.readAsDataURL( this.files[0] );
-                                                            }
-                                                        }
-                                                    </script>
-                                                </div>
+                                                <form id="avatar-form" enctype="multipart/form-data">
+                                                    {% csrf_token %}
+                                                    <div class="user-avatar-content" id="penLayer"
+                                                         onclick="F_Open_dialog()">
+                                                        <input type="file" name="img" id="fileInput"
+                                                               style="display:none">
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="user-profile-main">
                                         <div class="user-profile-main-screen-name">YoungYang</div>
                                         <div class="user-profile-main-stats user-profile-main-item">
-                                        <svg class="symbol symbol-dig user-profile-main-stats-icon">
-                                            <use xlink:href="#symbol-dig"></use>
-                                        </svg>Earned 10 likes
-                                    </div>
+                                            <svg class="symbol symbol-dig user-profile-main-stats-icon">
+                                                <use xlink:href="#symbol-dig"></use>
+                                            </svg>
+                                            Earned 10 likes
+                                        </div>
                                         <div class="user-profile-main-brief">stay hungry，stay foolish</div>
                                     </div>
                                 </div>

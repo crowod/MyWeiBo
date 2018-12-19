@@ -32,7 +32,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'id', 'follower_num', 'following_num', 'likes_earn')
+        fields = ('username', 'id', 'follower_num', 'following_num', 'likes_earn', 'avatar')
 
     def get_follower_num(self, obj):
         return FollowShip.objects.filter(following_id=obj.id).count()

@@ -151,7 +151,7 @@
                 element.find('p').text(result['total_like']);
             }
         })
-    })
+    });
 })
 (jQuery);
 

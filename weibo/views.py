@@ -468,8 +468,3 @@ class CollectionCancel(generics.CreateAPIView):
 class AvatarUpload(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         image = request.FILES['file']
-
-@csrf_exempt
-def test(request):
-    if request.method == 'POST':
-        Image.objects.create(image=request.FILES['image'])

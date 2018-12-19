@@ -46,5 +46,4 @@ urlpatterns = [
     path('comments/add', views.CommentAdd.as_view()),
     path('comments/delete', views.CommentDelete.as_view()),
     path('like', views.PostLike.as_view()),
-    path('image', views.test)
 ]
