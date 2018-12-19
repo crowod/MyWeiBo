@@ -213,6 +213,7 @@ class PostUser(generics.ListAPIView):
     lookup_field = 'user'
 
     def get(self, request, *args, **kwargs):
+        global is_following
         queryset = Post.objects.filter(user__username=kwargs['name']).order_by('-datetime')
         serializer = PostSerializer(queryset, many=True)
         queryset_liked = Like.objects.filter(user__username=kwargs['name'])
@@ -221,10 +222,19 @@ class PostUser(generics.ListAPIView):
         serializer_liked_list = list(serializer_liked.data)
         [y.update({'is_like': z.get('is_like')}) for x in serializer_list for y in x.get('user') for z in
          serializer_liked_list if z.get('user') == y.get('id') and z.get('post') == x.get('id')]
+        if request.user.username:
+            is_following = FollowShip.objects.filter(follower__username=request.user.username,
+                                                     following__username=kwargs['name']).exists()
         if serializer:
-            return Response({
-                'data': serializer.data
-            }, status=status.HTTP_200_OK, )
+            if request.user.username:
+                return Response({
+                    'data': serializer.data,
+                    'is_follow': is_following,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    'data': serializer.data
+                }, status=status.HTTP_200_OK)
         else:
             return Response(
                 status=status.HTTP_404_NOT_FOUND

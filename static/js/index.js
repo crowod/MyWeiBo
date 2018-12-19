@@ -39,7 +39,10 @@
         })
     });
 
-    function posts_update(result) {
+    function posts_update(result)
+// language=HTML
+        // language=HTML
+        {
         for (var i in result['data']) {
             var date = new Date(result['data'][i]['datetime']);
             date = date.getFullYear() + '/' + date.getMonth() + '/' + date.getDay();
@@ -49,7 +52,7 @@
                     <div class="message-card">
                     <div class="message-card-header is-flex">
                     <div class="message-card-header-left">
-                    <img class="message-card-topic-img" src="../static/image/avatar.png">
+                    <img class="message-card-topic-img" src=${result['data'][i]['user'][0]['avatar_url']}>
                     </div>
                     <div class="message-card-header-main">
                     <h1 class="topic-name">
@@ -113,6 +116,9 @@
                 document.querySelector('.user-profile-main-item').innerHTML = 'Earned ' + result['data']['likes_earn'] + ' likes';
                 document.querySelector('#following > span:nth-child(2)').innerHTML = result['data']['following_num'];
                 document.querySelector('#follower > span:nth-child(2)').innerHTML = result['data']['follower_num'];
+                document.querySelector('#follower > span:nth-child(2)').innerHTML = result['data']['follower_num'];
+                document.querySelector('.user-profile .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
+                document.querySelector('.site-header-right .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
                 post_id = result['data']['post_id'];
                 like_post_id = result['data']['like_post_id']
             }
