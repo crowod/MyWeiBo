@@ -34,23 +34,23 @@ def post_view(request):
         return render(request, 'home.html')
 
 
-def otherPost_view(request):
+def otherPost_view(request, username):
     if request.user.is_authenticated:
-        return render(request, 'othersPost.html')
+        return render(request, 'othersPost.html', {'username': username})
     else:
         return render(request, 'home.html')
 
 
-def following_view(request):
+def following_view(request, username):
     if request.user.is_authenticated:
-        return render(request, 'userFollow.html')
+        return render(request, 'userFollow.html', {'username': username})
     else:
         return render(request, 'home.html')
 
 
-def follower_view(request):
+def follower_view(request, username):
     if request.user.is_authenticated:
-        return render(request, 'userFollower.html')
+        return render(request, 'userFollower.html', {'username': username})
     else:
         return render(request, 'home.html')
 
