@@ -1,4 +1,3 @@
-
 //校验账号的格式
 function check_code() {
     //获取账号
@@ -9,8 +8,7 @@ function check_code() {
     if (code === "") {
         color1.style.border = "1px solid grey";
         return false;
-    }
-    else if (reg.test(code)) {
+    } else if (reg.test(code)) {
         //通过，增加ok样式
         color1.style.border = "1px solid green";
         return true;
@@ -28,8 +26,7 @@ function check_pwd1() {
     if (code2 === "") {
         color2.style.border = "1px solid grey";
         return false;
-    }
-    else if (reg2.test(code2)) {
+    } else if (reg2.test(code2)) {
         color2.style.border = "1px solid green";
         return true;
     } else {
@@ -45,8 +42,7 @@ function check_username() {
     if (code2 === "") {
         color2.style.border = "1px solid grey";
         return false;
-    }
-    else if (reg2.test(code2)) {
+    } else if (reg2.test(code2)) {
         color2.style.border = "1px solid green";
         return true;
     } else {
@@ -64,13 +60,11 @@ function check_pwd2() {
     if (code3 === "") {
         color3.style.border = "1px solid grey";
         return false;
-    }
-    else if (reg3.test(code3)) {
+    } else if (reg3.test(code3)) {
         if (code3 === code2) {
             color3.style.border = "1px solid green";
             return true;
-        }
-        else {
+        } else {
             color2.style.border = "1px solid red";
             color3.style.border = "1px solid red";
             return false;
@@ -86,17 +80,25 @@ function check_commit() {
     if (!check_code()) {
         ad.innerText = "Invalid email";
         event.preventDefault();
-    }
-    else if (!check_pwd1()) {
+    } else if (!check_pwd1()) {
         ad.innerText = "Password too short (6 chars. min)";
         event.preventDefault();
-    }
-    else if (!check_pwd2()) {
+    } else if (!check_pwd2()) {
         ad.innerText = "Password mismatch!";
         event.preventDefault();
-    }
-    else if (!check_username()) {
+    } else if (!check_username()) {
         ad.innerText = "Invalid username!";
         event.preventDefault();
     }
+
+    $('#tab-1').on("click", function () {
+        $('.sign-up-htm form input').each(function () {
+            $(this).val("")
+        })
+    });
+    $('#tab-2').on("click", function () {
+        $('.sign-in-htm form input').each(function () {
+            $(this).val("")
+        })
+    })
 }

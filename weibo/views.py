@@ -63,7 +63,7 @@ def landing_view(request, status=0):
                 return redirect('/')
             else:
                 lf = LoginForm()
-                return render(request, 'entrance.html', {'lf': lf, 'rf': rf, status: 1})
+                return render(request, 'entrance.html', {'lf': lf, 'rf': rf, 'status': 1})
         else:
             lf = LoginForm(request.POST)
             if lf.is_valid():
@@ -87,12 +87,12 @@ def landing_view(request, status=0):
                                   })
             else:
                 rf = RegisterForm()
-                return render(request, 'entrance.html', {'lf': lf, 'rf': rf, status: 0})
+                return render(request, 'entrance.html', {'lf': lf, 'rf': rf, 'status': 0})
 
     else:
         lf = LoginForm()
         rf = RegisterForm()
-        return render(request, 'entrance.html', {'lf': lf, 'rf': rf, status: status})
+        return render(request, 'entrance.html', {'lf': lf, 'rf': rf, 'status': status})
 
 
 def profile_view(request):
@@ -121,7 +121,7 @@ def profile_view(request):
                 return render(request, "profile.html", {"profile_form": profile_form,
                                                         "success_msg": "Update successfully!",
                                                         "user": user,
-                                                        "status": 1})
+                                                        "status": 0})
             else:
                 return render(request, "profile.html", {"error": profile_form.errors,
                                                         "profile_form": profile_form,
@@ -163,8 +163,15 @@ class MyProfile(generics.ListAPIView):
         queryset = User.objects.get(username=username)
         serializer = UserSerializer(queryset)
         serializer.delete_fields(fields=['id'])
+        queryset = Post.objects.filter(user__username=username)
+        post_id = list(map(lambda x: x.id, queryset))
+        result = {'post_id': post_id}
+        result.update(serializer.data)
+        queryset = Like.objects.filter(user__username=username).filter(is_like=True)
+        like_post_id = list(map(lambda x: x.post_id, queryset))
+        result.update({'like_post_id': like_post_id})
         return Response({
-            'data': serializer.data
+            'data': result
         }, status=status.HTTP_200_OK)
 
 
@@ -214,11 +221,13 @@ class PostAdd(generics.CreateAPIView):
         user = User.objects.get(username=request.user.username)
         post = Post.objects.create(content=content, datetime=datetime)
         post.user.add(user)
-        Like.objects.create(user=user, post=post)
         queryset = Post.objects.all().order_by('-datetime')
         serializer = PostSerializer(queryset, many=True)
+        queryset = Post.objects.filter(user__username=request.user.username)
+        posts_id = list(map(lambda x: x.id, queryset))
         return Response({
-            'data': serializer.data
+            'data': serializer.data,
+            'posts_id': posts_id
         }, status=status.HTTP_201_CREATED, )
 
 
@@ -251,7 +260,7 @@ class PostList(generics.ListAPIView):
             )
 
 
-class PostLiked(generics.CreateAPIView):
+class PostLike(generics.CreateAPIView):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
 
@@ -260,15 +269,17 @@ class PostLiked(generics.CreateAPIView):
         post_id = request.data['post_id']
         user = User.objects.get(username=username)
         post = Post.objects.get(id=post_id)
-        like = Like.objects.get(user=user, post=post)
+        like, created = Like.objects.get_or_create(user=user, post=post, defaults={'is_like': False})
         if like.is_like is True:
             like.is_like = False
         else:
             like.is_like = True
         like.save()
+        total_like = Like.objects.filter(post=post).filter(is_like=True).count()
         if like:
-            return Response(
-                status=status.HTTP_201_CREATED
+            return Response({
+                'total_like': total_like
+            }, status=status.HTTP_201_CREATED
             )
         else:
             return Response(
@@ -456,8 +467,7 @@ class CollectionCancel(generics.CreateAPIView):
 
 class AvatarUpload(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
-        pass
-
+        image = request.FILES['file']
 
 @csrf_exempt
 def test(request):

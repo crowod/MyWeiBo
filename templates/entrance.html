@@ -14,7 +14,7 @@
                     $('#tab-2').attr('checked', "");
                     $('#tab-1').removeAttr("checked");
                 {% endif %}
-            {% else %}
+            {% elif status == 0 %}
                 $('#tab-1').attr('checked', "");
                 $('#tab-2').removeAttr("checked");
             {% endif %}

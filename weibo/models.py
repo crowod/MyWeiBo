@@ -1,9 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
-from django_thumbs.fields import ImageThumbsField
 from django.db import models
-
-import weibo
+from django_thumbs.fields import ImageThumbsField
 
 
 class UserManager(BaseUserManager):
@@ -50,10 +48,15 @@ class Image(models.Model):
 
 
 class User(AbstractUser):
+    SIZES = (
+        {'code': 'avatar', 'wxh': '125x125', 'resize': 'crop'},
+        {'code': 'm', 'wxh': '640x480', 'resize': 'scale'},
+        {'code': '150', 'wxh': '150x150'},  # 'resize' defaults to 'scale'
+    )
     username = models.CharField('Username', max_length=30, unique=True)
     email = models.EmailField('Email address', unique=True)
     password = models.CharField(max_length=16)
-    avatar = models.ForeignKey(Image, on_delete=models.CASCADE)
+    avatar = ImageThumbsField(upload_to='user_avatar', sizes=SIZES, default='media/default.jpg')
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
     objects = UserManager()

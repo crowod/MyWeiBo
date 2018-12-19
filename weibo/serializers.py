@@ -41,11 +41,14 @@ class UserSerializer(serializers.ModelSerializer):
         return FollowShip.objects.filter(follower_id=obj.id).count()
 
     def get_likes_earn(self, obj):
-        queryset = Post.objects.filter(user__id=obj.id)
-        return reduce(lambda x, y: x + y,
-                      map(lambda x:
-                          Like.objects.filter(post_id=x).filter(is_like=True).count(),
-                          map(lambda x: x.id, queryset)))
+        if Post.objects.filter(user__id=obj.id).exists():
+            queryset = Post.objects.filter(user__id=obj.id)
+            return reduce(lambda x, y: x + y,
+                          map(lambda x:
+                              Like.objects.filter(post_id=x).filter(is_like=True).count(),
+                              map(lambda x: x.id, queryset)))
+        else:
+            return 0
 
     def delete_fields(self, *args, **kwargs):
         fields = kwargs.get('fields')
