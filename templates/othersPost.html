@@ -7,7 +7,8 @@
     <link href="../static/css/style.css" rel="stylesheet">
     <link href="../static/css/profile.css" rel="stylesheet">
     <script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="../static/js/profile.js"></script>
+    <script src="../static/js/csrf.js"></script>
+    <script type="text/javascript" src="../static/js/otherPost.js"></script>
 </head>
 
 <body class="page page-spa">
@@ -178,15 +179,15 @@
                                             <div class="user-profile-background" style="background-image: url(&quot;../static/image/bg.png&quot;);"></div>
                                             <div class="user-profile-thumbnailUrl">
                                                 <div class="user-avatar ">
-                                                    <div class="user-avatar-content" style="background-image: url(&quot;../static/image/otherAvatar.png&quot;);"></div>
+                                                    <div id="avatar" class="user-avatar-content" ></div>
                                                 </div>
                                             </div>
                                             <div class="user-profile-main">
-                                                <div class="user-profile-main-screen-name">莫尔索</div>
+                                                <div class="user-profile-main-screen-name">{{ username }}</div>
                                                 <div class="user-profile-main-stats user-profile-main-item">
                                                     <svg class="symbol symbol-dig user-profile-main-stats-icon">
                                                         <use xlink:href="#symbol-dig"></use>
-                                                    </svg>Earned 10 likes
+                                                    </svg>
                                                 </div>
                                                 <div class="user-profile-main-brief">stay hungry，stay foolish</div>
                                                 <div class="user-profile-operation">
@@ -202,18 +203,18 @@
                                         <div>
                                             <ul class="menu menu-vertical user-nav-collection menu-light menu-root" role="menu" aria-activedescendant="" tabindex="0">
                                                 <li class="menu-item" role="menuitem" aria-selected="false">
-                                                    <a target=""href="/post"  class="is-active">
+                                                    <a target=""href=""  class="is-active" id="post">
                                                         <div class="is-flex between-xs"><span>TA'S ACTIVITY</span><span></span></div>
                                                     </a>
                                                 </li>
                                                 <li class="menu-item" role="menuitem" aria-selected="false">
-                                                    <a target=""href="/following">
-                                                        <div class="is-flex between-xs"><span>TA'S FOLLOWING</span><span>10</span></div>
+                                                    <a target=""href="" id="following">
+                                                        <div class="is-flex between-xs" id="followings"><span>TA'S FOLLOWING</span><span></span></div>
                                                     </a>
                                                 </li>
                                                 <li class="menu-item" role="menuitem" aria-selected="false">
-                                                    <a target=""href="/follower">
-                                                        <div class="is-flex between-xs"><span>TA'S FLLOWER</span><span>56</span></div>
+                                                    <a target=""href="" id="follower">
+                                                        <div class="is-flex between-xs" id="followers"><span>TA'S FLLOWER</span><span></span></div>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -223,53 +224,7 @@
                         </div>
                         <div class="col  user-main">
                             <div class="personal-post">
-                                <div>
-                                    <div class="user-activity-container">
-                                        <div class="user-activity">
-                                            <div class="user-activity-header is-flex">
-                                                <div class="user-activity-header-left">
-                                                    <div class="user-activity-header-left-avatar">
-                                                        <span>
-                                                            <div class="user-avatar ">
-                                                                <div class="user-avatar-content" style="background-image: url(../static/image/otherAvatar.png);"></div>
-                                                            </div>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="user-activity-header-main">
-                                                    <h1 class="user-name">莫尔索</h1>
-                                                    <p class="post-time"><span>13:07</span></p>
-                                                </div>
-                                            </div>
-                                            <div class="user-activity-body">
-                                                    <div class="user-activity-content">
-                                                        <div class="user-activity-post">
-                                                            <div class="readable-content">
-                                                                <div class="readable-content-collapse"><span>面对当时部分学界人士对费孝通在《乡土重建》和《乡土中国》中谈及的观点进行偏激的批判和反驳，费孝通所做的一番关于“求同存异”的精彩回应！</span></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                            </div>
-                                            <div class="user-activity-footer">
-                                                <div class="op-wrap">
-                                                    <div class="op-item ">
-                                                        <a>
-                                                            <svg class="symbol symbol-dig">
-                                                                <use xlink:href="#symbol-dig"></use>
-                                                            </svg>3
-                                                        </a>
-                                                    </div>
-                                                    <div class="op-item ">
-                                                        <a>
-                                                            <svg class="symbol symbol-comment">
-                                                                <use xlink:href="#symbol-comment"></use>
-                                                            </svg>1
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div id="append">
                                 </div>
                             </div>
                         </div>
