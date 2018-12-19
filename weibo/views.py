@@ -1,21 +1,18 @@
-import json
-import re
-
 from django.contrib import auth
 from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.shortcuts import render, redirect
 # Create your views here.
 from django.utils import timezone
-from django.core.validators import validate_email
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from weibo.forms import LoginForm, RegisterForm, ProfileForm
-from weibo.models import User, Post, Liked, FollowShip, Comment
-from weibo.serializers import PostSerializer, LikedSerializer, UserSerializer, FollowShipSerializer, \
+from weibo.models import User, Post, Like, FollowShip, Comment, Image
+from weibo.serializers import PostSerializer, LikeSerializer, UserSerializer, FollowShipSerializer, \
     CommentSerializer
-from . import forms
 
 current_url = ""
 
@@ -141,10 +138,11 @@ def profile_view(request):
                 else:
                     user.set_password(password)
                     user.save()
+                    auth.login(request, user)
                 return render(request, "profile.html", {"profile_form": profile_form,
                                                         "success_msg": "Update successfully!",
                                                         "user": user,
-                                                        "status": 1})
+                                                        "status": 0})
             else:
                 return render(request, "profile.html", {"error": profile_form.errors,
                                                         "profile_form": profile_form,
@@ -185,20 +183,28 @@ class MyProfile(generics.ListAPIView):
         username = request.user.username
         queryset = User.objects.get(username=username)
         serializer = UserSerializer(queryset)
-        queryset = FollowShip.objects.filter(following__username=username)
-        serializer_follower = FollowShipSerializer(queryset, many=True)
-        follower_num = len([x.get('follower_user') for x in serializer_follower.data])
-        queryset = FollowShip.objects.filter(follower__username=username)
-        serializer_following = FollowShipSerializer(queryset, many=True)
-        following_num = len([x.get('following_user') for x in serializer_following.data])
-        new_dict = {'following_num': following_num,
-                    'follower_num': follower_num}
-        new_dict.update(serializer.data)
-        new_dict.pop('id')
+        serializer.delete_fields(fields=['id'])
+        queryset = Post.objects.filter(user__username=username)
+        post_id = list(map(lambda x: x.id, queryset))
+        result = {'post_id': post_id}
+        result.update(serializer.data)
+        queryset = Like.objects.filter(user__username=username).filter(is_like=True)
+        like_post_id = list(map(lambda x: x.post_id, queryset))
+        result.update({'like_post_id': like_post_id})
         return Response({
-            'status': status.HTTP_200_OK,
-            'data': new_dict
-        })
+            'data': result
+        }, status=status.HTTP_200_OK)
+
+
+class UserProfile(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        username = kwargs['username']
+        queryset = User.objects.get(username=username)
+        serializer = UserSerializer(queryset)
+        serializer.delete_fields(fields=['id'])
+        return Response({
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
 
 
 class PostUser(generics.ListAPIView):
@@ -209,21 +215,20 @@ class PostUser(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         queryset = Post.objects.filter(user__username=kwargs['name']).order_by('-datetime')
         serializer = PostSerializer(queryset, many=True)
-        queryset_liked = Liked.objects.filter(user__username=kwargs['name'])
-        serializer_liked = LikedSerializer(queryset_liked, many=True)
+        queryset_liked = Like.objects.filter(user__username=kwargs['name'])
+        serializer_liked = LikeSerializer(queryset_liked, many=True)
         serializer_list = list(serializer.data)
         serializer_liked_list = list(serializer_liked.data)
-        [y.update({'is_liked': z.get('is_liked')}) for x in serializer_list for y in x.get('user') for z in
+        [y.update({'is_like': z.get('is_like')}) for x in serializer_list for y in x.get('user') for z in
          serializer_liked_list if z.get('user') == y.get('id') and z.get('post') == x.get('id')]
         if serializer:
             return Response({
-                'status': status.HTTP_200_OK,
                 'data': serializer.data
-            })
+            }, status=status.HTTP_200_OK, )
         else:
-            return Response({
-                'status': status.HTTP_404_NOT_FOUND
-            })
+            return Response(
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class PostAdd(generics.CreateAPIView):
@@ -237,13 +242,14 @@ class PostAdd(generics.CreateAPIView):
         user = User.objects.get(username=request.user.username)
         post = Post.objects.create(content=content, datetime=datetime)
         post.user.add(user)
-        Liked.objects.create(user=user, post=post)
         queryset = Post.objects.all().order_by('-datetime')
         serializer = PostSerializer(queryset, many=True)
+        queryset = Post.objects.filter(user__username=request.user.username)
+        posts_id = list(map(lambda x: x.id, queryset))
         return Response({
-            'status': status.HTTP_201_CREATED,
-            'data': serializer.data
-        })
+            'data': serializer.data,
+            'posts_id': posts_id
+        }, status=status.HTTP_201_CREATED, )
 
 
 class PostDelete(generics.CreateAPIView):
@@ -254,11 +260,8 @@ class PostDelete(generics.CreateAPIView):
         post_id = request.data['post_id']
         username = request.user.username
         user = User.objects.get(username=username)
-        Liked.objects.get(user=user, post_id=post_id).delete()
         Post.objects.get(user=user, id=post_id).delete()
-        return Response({
-            'status': status.HTTP_201_CREATED
-        })
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class PostList(generics.ListAPIView):
@@ -270,34 +273,39 @@ class PostList(generics.ListAPIView):
         serializer = PostSerializer(queryset, many=True)
         if serializer:
             return Response({
-                'status': status.HTTP_200_OK,
                 'data': serializer.data
-            })
+            }, status=status.HTTP_200_OK, )
         else:
-            return Response({
-                'status': status.HTTP_404_NOT_FOUND
-            })
+            return Response(
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
-class PostLiked(generics.CreateAPIView):
-    queryset = Liked.objects.all()
-    serializer_class = LikedSerializer
+class PostLike(generics.CreateAPIView):
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
 
     def post(self, request, *args, **kwargs):
         username = request.user.username
         post_id = request.data['post_id']
-        is_liked = request.data['is_liked']
         user = User.objects.get(username=username)
         post = Post.objects.get(id=post_id)
-        liked = Liked.objects.update_or_create(user=user, post=post, defaults={"is_liked": is_liked})
-        if liked:
-            return Response({
-                'status': status.HTTP_201_CREATED
-            })
+        like, created = Like.objects.get_or_create(user=user, post=post, defaults={'is_like': False})
+        if like.is_like is True:
+            like.is_like = False
         else:
+            like.is_like = True
+        like.save()
+        total_like = Like.objects.filter(post=post).filter(is_like=True).count()
+        if like:
             return Response({
-                'status': status.HTTP_404_NOT_FOUND
-            })
+                'total_like': total_like
+            }, status=status.HTTP_201_CREATED
+            )
+        else:
+            return Response(
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class FollowerList(generics.ListAPIView):
@@ -311,13 +319,12 @@ class FollowerList(generics.ListAPIView):
         result = [x.get('follower_user') for x in serializer.data]
         if serializer:
             return Response({
-                'status': status.HTTP_200_OK,
                 'data': result
-            })
+            }, status=status.HTTP_200_OK, )
         else:
-            return Response({
-                'status': status.HTTP_404_NOT_FOUND
-            })
+            return Response(
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class FollowingList(generics.ListAPIView):
@@ -331,13 +338,12 @@ class FollowingList(generics.ListAPIView):
         result = [x.get('following_user') for x in serializer.data]
         if serializer:
             return Response({
-                'status': status.HTTP_200_OK,
                 'data': result
-            })
+            }, status=status.HTTP_200_OK)
         else:
-            return Response({
-                'status': status.HTTP_404_NOT_FOUND
-            })
+            return Response(
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class FollowingAdd(generics.CreateAPIView):
@@ -351,13 +357,13 @@ class FollowingAdd(generics.CreateAPIView):
         following = User.objects.get(username=following_name)
         follow_ship = FollowShip.objects.create(follower=user, following=following)
         if follow_ship:
-            return Response({
-                'status': status.HTTP_201_CREATED
-            })
+            return Response(
+                status=status.HTTP_201_CREATED
+            )
         else:
-            return Response({
-                'status': status.HTTP_404_NOT_FOUND
-            })
+            return Response(
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class FollowingCancel(generics.CreateAPIView):
@@ -370,9 +376,9 @@ class FollowingCancel(generics.CreateAPIView):
         user = User.objects.get(username=username)
         following = User.objects.get(username=following_name)
         FollowShip.objects.get(follower=user, following=following).delete()
-        return Response({
-            'status': status.HTTP_201_CREATED
-        })
+        return Response(
+            status=status.HTTP_201_CREATED
+        )
 
 
 class CommentList(generics.ListAPIView):
@@ -386,13 +392,12 @@ class CommentList(generics.ListAPIView):
         serializer = CommentSerializer(queryset, many=True)
         if serializer:
             return Response({
-                'status': status.HTTP_200_OK,
                 'data': serializer.data
-            })
+            }, status=status.HTTP_200_OK)
         else:
-            return Response({
-                'status': status.HTTP_404_NOT_FOUND
-            })
+            return Response(
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class CommentAdd(generics.CreateAPIView):
@@ -408,9 +413,9 @@ class CommentAdd(generics.CreateAPIView):
         comment = Comment.objects.create(content=content, datetime=datetime)
         comment.user.add(user)
         Post.objects.get(id=post_id).comment.add(comment)
-        return Response({
-            'status': status.HTTP_201_CREATED
-        })
+        return Response(
+            status=status.HTTP_201_CREATED
+        )
 
 
 class CommentDelete(generics.CreateAPIView):
@@ -427,14 +432,14 @@ class UserSearch(generics.ListAPIView):
         serializer = UserSerializer(queryset, many=True)
         if serializer:
             return Response({
-                'status': status.HTTP_200_OK,
+
                 'data': serializer.data
-            })
+            }, status=status.HTTP_200_OK)
         else:
             return Response({
-                'status': status.HTTP_404_NOT_FOUND,
+
                 'data': serializer.data
-            })
+            }, status=status.HTTP_404_NOT_FOUND)
 
 
 class PostSearch(generics.ListAPIView):
@@ -447,14 +452,23 @@ class PostSearch(generics.ListAPIView):
         serializer = PostSerializer(queryset, many=True)
         if serializer:
             return Response({
-                'status': status.HTTP_200_OK,
                 'data': serializer.data
-            })
+            }, status=status.HTTP_200_OK)
         else:
             return Response({
-                'status': status.HTTP_404_NOT_FOUND,
                 'data': serializer.data
-            })
+            }, status=status.HTTP_404_NOT_FOUND)
+
+
+class RecommendationList(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        queryset = User.objects.exclude(username=request.user.username)
+        serializer = UserSerializer(queryset, many=True)
+        serializer.delete_fields(fields=['id', 'following_num', 'likes_earn'])
+        result = sorted(serializer.data, key=lambda x: x.get('follower_num'))
+        return Response({
+            'data': result
+        }, status=status.HTTP_200_OK)
 
 
 class CollectionList(generics.ListAPIView):
@@ -474,4 +488,4 @@ class CollectionCancel(generics.CreateAPIView):
 
 class AvatarUpload(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
-        pass
+        image = request.FILES['file']

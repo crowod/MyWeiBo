@@ -28,8 +28,10 @@ urlpatterns = [
     path('logout/', views.logout_view),
     path('post',views.post_view),
     path('<str:username>/post',views.otherPost_view),
+    path('users/avatar', views.AvatarUpload),
     path('users/me', views.MyProfile.as_view()),
     path('users/search', views.UserSearch.as_view()),
+    path('users/<str:username>', views.UserProfile.as_view()),
     path('posts/all', views.PostList.as_view()),
     path('posts/add', views.PostAdd.as_view()),
     path('posts/delete', views.PostDelete.as_view()),
@@ -46,5 +48,5 @@ urlpatterns = [
     path('comments/all', views.CommentList.as_view()),
     path('comments/add', views.CommentAdd.as_view()),
     path('comments/delete', views.CommentDelete.as_view()),
-    path('liked', views.PostLiked.as_view())
+    path('like', views.PostLike.as_view()),
 ]

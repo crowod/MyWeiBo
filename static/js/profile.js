@@ -40,15 +40,34 @@ function passwordValidation() {
     }
 }
 
-$(document).ready(function(){
-    $('#MyImage').hover(function(){
-     $('#penLayer').fadeToggle();
+$(document).ready(function () {
+    $('#MyImage').hover(function () {
+        $('#penLayer').fadeToggle();
     })
-})
+});
 
-function F_Open_dialog()
-{
+function F_Open_dialog() {
     document.getElementById("fileInput").click();
+}
+
+document.getElementById("fileInput").addEventListener("change", readFile, false);
+
+function readFile() {
+    if (this.files && this.files[0]) {
+        var data = new FormData();
+        data.append('file', this.files[0]);
+        $.ajax({
+            url: 'users/avatar',
+            type: 'POST',
+            cache: false,
+            processData: false,
+            contentType: false,
+            data: data,
+            success: function (result) {
+
+            }
+        })
+    }
 }
 
 
