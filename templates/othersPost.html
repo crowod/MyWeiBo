@@ -3,8 +3,11 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>weibo</title>    
+    <title>weibo</title>
     <link href="../static/css/style.css" rel="stylesheet">
+    <link href="../static/css/profile.css" rel="stylesheet">
+    <script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="../static/js/profile.js"></script>
 </head>
 
 <body class="page page-spa">
@@ -117,192 +120,153 @@
         <div class="app-container">
             <div class="root-layout">
                 <div class="site-header">
-                        <div class="container-fluid is-limited no-padding">
-                            <div class="row middle-xs site-header-wrap">
-                                <div class="col col-xs  site-header-left">
-                                    <div class="row start-xs">
-                                        <div class="col col-xs ">
-                                            <div class="row no-margin middle-xs brand">
-                                                <a href="/">
-                                                    <img class="brand-logo" src="../static/image/social-weibo.svg" href=""><span class="brand-name">WeiBo</span>
-                                                </a>
-                                            </div>
+                    <div class="container-fluid is-limited no-padding">
+                        <div class="row middle-xs site-header-wrap">
+                            <div class="col col-xs  site-header-left">
+                                <div class="row start-xs">
+                                    <div class="col col-xs ">
+                                        <div class="row no-margin middle-xs brand">
+                                            <a href="/">
+                                                <img class="brand-logo" src="../static/image/social-weibo.svg" href=""><span
+                                                    class="brand-name">WeiBo</span>
+                                            </a>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col  site-header-search hidden-xs hidden-sm">
-                                    <div>
-                                        <div>
-                                            <div class="search-wrap is-flex between-xs dropdown-trigger">
-                                                <input class="input search-wrap-input" placeholder="" type="text" value="">
-                                                <div class="search-wrap-btn-default">
-                                                    <svg class="symbol symbol-search">
-                                                        <use xlink:href="#symbol-search"></use>
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col col-xs  site-header-right">
-                                    <div class="row no-margin end-xs middle-xs is-flex middle-xs">
-                                        <a class="header-item hidden-xs"href="/">Home</a>
-                                        <div class="user-info header-item dropdown-trigger">
-                                            <div class="user-avatar ">
-                                                <div class="user-avatar-content" style="background-image: url(&quot;../static/image/avatar.png&quot;);"></div>
-                                            </div>
-                                        </div>
-                                        <a href="/logout">
-                                            <span class="header-item header-item-icon hidden-xs" >
-                                                    <svg class="symbol symbol-poweroff" >
-                                                        <use xlink:href="#symbol-poweroff"></use>
-                                                    </svg>
-                                            </span>
-                                        </a>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col  site-header-search hidden-xs hidden-sm">
+                                <div>
+                                    <div>
+                                        <div class="search-wrap is-flex between-xs dropdown-trigger">
+                                            <input class="input search-wrap-input" placeholder="" type="text" value="">
+                                            <div class="search-wrap-btn-default">
+                                                <svg class="symbol symbol-search">
+                                                    <use xlink:href="#symbol-search"></use>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col col-xs  site-header-right">
+                                <div class="row no-margin end-xs middle-xs is-flex middle-xs">
+                                    <a class="header-item hidden-xs" href="/">Home</a>
+                                    <div class="user-info header-item dropdown-trigger">
+                                        <div class="user-avatar ">
+                                            <div class="user-avatar-content"
+                                                 style="background-image: url(&quot;../static/image/avatar.png&quot;);"></div>
+                                        </div>
+                                    </div>
+                                    <a href="/logout">
+                                        <span class="header-item header-item-icon hidden-xs">
+                                                <svg class="symbol symbol-poweroff">
+                                                    <use xlink:href="#symbol-poweroff"></use>
+                                                </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
+                    </div>
                 </div>
                 <div class="container-fluid is-limited no-padding solid-layer">
                     <div class="row  user-root center-xs">
                         <div class="col  user-left hidden-sm hidden-xs">
-                                <div>
+                            <div>
                                     <div class="affix" style="width: 250px;">
                                         <div class="user-profile">
                                             <div class="user-profile-background" style="background-image: url(&quot;../static/image/bg.png&quot;);"></div>
                                             <div class="user-profile-thumbnailUrl">
                                                 <div class="user-avatar ">
-                                                    <div class="user-avatar-content" style="background-image: url(&quot;../static/image/avatar.png&quot;);"></div>
+                                                    <div class="user-avatar-content" style="background-image: url(&quot;../static/image/otherAvatar.png&quot;);"></div>
                                                 </div>
                                             </div>
                                             <div class="user-profile-main">
-                                                <div class="user-profile-main-screen-name">YoungYang</div>
+                                                <div class="user-profile-main-screen-name">莫尔索</div>
                                                 <div class="user-profile-main-stats user-profile-main-item">
                                                     <svg class="symbol symbol-dig user-profile-main-stats-icon">
                                                         <use xlink:href="#symbol-dig"></use>
                                                     </svg>Earned 10 likes
                                                 </div>
                                                 <div class="user-profile-main-brief">stay hungry，stay foolish</div>
+                                                <div class="user-profile-operation">
+                                                    <div class="user-profile-operation-left">
+                                                        <div class="user-profile-operation-subscribe">
+                                                            <div class="user-profile-operation-subscribe-primary">Following</div>
+                                                            <div class="user-profile-operation-subscribe-danger">Unfollowing</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div>
                                             <ul class="menu menu-vertical user-nav-collection menu-light menu-root" role="menu" aria-activedescendant="" tabindex="0">
                                                 <li class="menu-item" role="menuitem" aria-selected="false">
-                                                    <a target=""href="/profile">
-                                                        <div class="is-flex between-xs"><span>ACCOUNT</span><span></span></div>
-                                                    </a>
-                                                </li>
-                                                <li class="menu-item" role="menuitem" aria-selected="false">
-                                                    <a target=""href="/post">
-                                                        <div class="is-flex between-xs"><span>POST NEWS</span><span></span></div>
+                                                    <a target=""href="/post"  class="is-active">
+                                                        <div class="is-flex between-xs"><span>TA'S ACTIVITY</span><span></span></div>
                                                     </a>
                                                 </li>
                                                 <li class="menu-item" role="menuitem" aria-selected="false">
                                                     <a target=""href="/following">
-                                                        <div id="following" class="is-flex between-xs"><span>FOLLOWING</span><span>6</span></div>
+                                                        <div class="is-flex between-xs"><span>TA'S FOLLOWING</span><span>10</span></div>
                                                     </a>
                                                 </li>
                                                 <li class="menu-item" role="menuitem" aria-selected="false">
-                                                    <a target=""href="/follower" class="is-active">
-                                                        <div id="follower" class="is-flex between-xs"><span>FOLLOWER</span><span>5</span></div>
+                                                    <a target=""href="/follower">
+                                                        <div class="is-flex between-xs"><span>TA'S FLLOWER</span><span>56</span></div>
                                                     </a>
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
-                                </div>
+                            </div>
                         </div>
                         <div class="col  user-main">
-                            <div class="followed-user">
+                            <div class="personal-post">
                                 <div>
-                                    <div class="user-card is-small ">
-                                        <div class="user-card-header is-flex">
-                                            <div class="user-card-header-avatar">
-                                                <div class="user-avatar ">
-                                                    <div class="user-avatar-content" style="background-image: url(&quot;../static/avatar/1.png&quot;);"></div>
+                                    <div class="user-activity-container">
+                                        <div class="user-activity">
+                                            <div class="user-activity-header is-flex">
+                                                <div class="user-activity-header-left">
+                                                    <div class="user-activity-header-left-avatar">
+                                                        <span>
+                                                            <div class="user-avatar ">
+                                                                <div class="user-avatar-content" style="background-image: url(../static/image/otherAvatar.png);"></div>
+                                                            </div>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="user-activity-header-main">
+                                                    <h1 class="user-name">莫尔索</h1>
+                                                    <p class="post-time"><span>13:07</span></p>
                                                 </div>
                                             </div>
-                                            <div class="user-card-info">
-                                                <h1 class="user-card-title">Youth</h1>
+                                            <div class="user-activity-body">
+                                                    <div class="user-activity-content">
+                                                        <div class="user-activity-post">
+                                                            <div class="readable-content">
+                                                                <div class="readable-content-collapse"><span>面对当时部分学界人士对费孝通在《乡土重建》和《乡土中国》中谈及的观点进行偏激的批判和反驳，费孝通所做的一番关于“求同存异”的精彩回应！</span></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                             </div>
-                                            <div>
-                                                <div class="user-follow"><button class="btn btn-warning user-follow-warn">follow</button></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="user-card is-small ">
-                                        <div class="user-card-header is-flex">
-                                            <div class="user-card-header-avatar">
-                                                <div class="user-avatar ">
-                                                    <div class="user-avatar-content" style="background-image: url(&quot;../static/avatar/2.jpg&quot;);"></div>
+                                            <div class="user-activity-footer">
+                                                <div class="op-wrap">
+                                                    <div class="op-item ">
+                                                        <a>
+                                                            <svg class="symbol symbol-dig">
+                                                                <use xlink:href="#symbol-dig"></use>
+                                                            </svg>3
+                                                        </a>
+                                                    </div>
+                                                    <div class="op-item ">
+                                                        <a>
+                                                            <svg class="symbol symbol-comment">
+                                                                <use xlink:href="#symbol-comment"></use>
+                                                            </svg>1
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="user-card-info">
-                                                <h1 class="user-card-title">Morso</h1>
-                                            </div>
-                                            <div>
-                                                <div class="user-follow"><button class="btn btn-warning user-follow-warn">follow</button></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="user-card is-small ">
-                                        <div class="user-card-header is-flex">
-                                            <div class="user-card-header-avatar">
-                                                <div class="user-avatar ">
-                                                    <div class="user-avatar-content" style="background-image: url(&quot;../static/avatar/3.jpg&quot;);"></div>
-                                                </div>
-                                            </div>
-                                            <div class="user-card-info">
-                                                <h1 class="user-card-title">纳骨小鸟</h1>
-                                            </div>
-                                            <div>
-                                                <div class="user-follow"><button class="btn btn-warning user-follow-warn">follow</button></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="user-card is-small ">
-                                        <div class="user-card-header is-flex">
-                                            <div class="user-card-header-avatar">
-                                                <div class="user-avatar ">
-                                                    <div class="user-avatar-content" style="background-image: url(&quot;../static/avatar/4.jpg&quot;);"></div>
-                                                </div>
-                                            </div>
-                                            <div class="user-card-info">
-                                                <h1 class="user-card-title">派大涛_</h1>
-                                            </div>
-                                            <div>
-                                                <div class="user-follow"><button class="btn btn-warning user-follow-warn">follow</button></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="user-card is-small ">
-                                        <div class="user-card-header is-flex">
-                                            <div class="user-card-header-avatar">
-                                                <div class="user-avatar ">
-                                                    <div class="user-avatar-content" style="background-image: url(&quot;../static/avatar/5.jpg&quot;);"></div>
-                                                </div>
-                                            </div>
-                                            <div class="user-card-info">
-                                                <h1 class="user-card-title">瓦恁</h1>
-                                            </div>
-                                            <div>
-                                                <div class="user-follow"><button class="btn btn-warning user-follow-warn">follow</button></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="user-card is-small ">
-                                        <div class="user-card-header is-flex">
-                                            <div class="user-card-header-avatar">
-                                                <div class="user-avatar ">
-                                                    <div class="user-avatar-content" style="background-image: url(&quot;../static/avatar/6.jpg&quot;);"></div>
-                                                </div>
-                                            </div>
-                                            <div class="user-card-info">
-                                                <h1 class="user-card-title">East China Normal University</h1>
-                                            </div>
-                                            <div>
-                                                <div class="user-follow"><button class="btn btn-warning user-follow-warn">follow</button></div>
                                             </div>
                                         </div>
                                     </div>

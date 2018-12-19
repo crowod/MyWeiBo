@@ -92,6 +92,7 @@ class ProfileForm(forms.Form):
                                                widget=forms.PasswordInput(
                                                    attrs={'placeholder': 'New password confirmation'}))
 
+
     def clean_password_profile_new(self):
         password_new = self.cleaned_data['password_profile_new']
         if len(password_new) < 6:

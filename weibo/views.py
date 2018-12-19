@@ -37,6 +37,13 @@ def post_view(request):
         return render(request, 'home.html')
 
 
+def otherPost_view(request):
+    if request.user.is_authenticated:
+        return render(request, 'othersPost.html')
+    else:
+        return render(request, 'home.html')
+
+
 def following_view(request):
     if request.user.is_authenticated:
         return render(request, 'userFollow.html')
@@ -47,6 +54,20 @@ def following_view(request):
 def follower_view(request):
     if request.user.is_authenticated:
         return render(request, 'userFollower.html')
+    else:
+        return render(request, 'home.html')
+
+
+def otherFollower_view(request):
+    if request.user.is_authenticated:
+        return render(request, 'otherFollower.html')
+    else:
+        return render(request, 'home.html')
+
+
+def otherFollowing_view(request):
+    if request.user.is_authenticated:
+        return render(request, 'otherFollow.html')
     else:
         return render(request, 'home.html')
 
