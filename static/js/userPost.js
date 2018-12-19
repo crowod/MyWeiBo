@@ -1,14 +1,18 @@
+var like_post_id = [];
 $(document).ready(function () {
     var username;
+
     $.ajax({
         url: '/users/me',
         type: 'GET',
         data: '',
         success: function (result) {
                 document.querySelector('.user-profile-main-screen-name').innerHTML = result['data']['username'];
+                document.querySelector('.user-profile-main-item').innerHTML = 'Earned ' + result['data']['likes_earn'] + ' likes';
                 document.querySelector('#following > span:nth-child(2)').innerHTML = result['data']['following_num'];
                 document.querySelector('#follower > span:nth-child(2)').innerHTML = result['data']['follower_num'];
                 username = document.querySelector('.user-profile-main-screen-name').innerHTML;
+                like_post_id = result['data']['like_post_id']
                 $.ajax({
                     url: '/posts/' + username,
                     type: 'GET',
@@ -88,6 +92,11 @@ function posts_update(result) {
             )
         )
     }
+    $('.user-activity-container').each(function () {
+        if (like_post_id.indexOf(parseInt($(this)[0].id)) !== -1) {
+            $(this).find('.like').parent().parent().addClass('is-active');
+        }
+    });
 }
 
 
