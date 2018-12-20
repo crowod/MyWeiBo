@@ -1,4 +1,5 @@
 var like_post_id = [];
+var useravatar ;
 var username;
 $(document).ready(function () {
     $.ajax({
@@ -10,7 +11,10 @@ $(document).ready(function () {
                 document.querySelector('.user-profile-main-item').innerHTML = 'Earned ' + result['data']['likes_earn'] + ' likes';
                 document.querySelector('#following > span:nth-child(2)').innerHTML = result['data']['following_num'];
                 document.querySelector('#follower > span:nth-child(2)').innerHTML = result['data']['follower_num'];
+                document.querySelector('.user-profile .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
+                document.querySelector('.site-header-right .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
                 username = document.querySelector('.user-profile-main-screen-name').innerHTML;
+                useravatar = result['data']['avatar_url'];
                 like_post_id = result['data']['like_post_id']
                 $.ajax({
                     url: '/posts/' + username,
@@ -39,7 +43,7 @@ function posts_update(result) {
                                 <div class="user-activity-header-left-avatar">
                                     <span>
                                         <div class="user-avatar ">
-                                            <div class="user-avatar-content" style="background-image: url(&quot;../static/image/avatar.png&quot;);"></div>
+                                            <div class="user-avatar-content avatar"></div>
                                         </div>
                                     </span>
                                 </div>
@@ -95,6 +99,7 @@ function posts_update(result) {
         if (like_post_id.indexOf(parseInt($(this)[0].id)) !== -1) {
             $(this).find('.like').parent().parent().addClass('is-active');
         }
+        $('.avatar').css('background-image', 'url(' + useravatar + ') ');
     });
 }
 
