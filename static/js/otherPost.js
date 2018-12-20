@@ -7,28 +7,45 @@ $(document).ready(function () {
         type: 'GET',
         data: '',
         success: function (result) {
-                document.querySelector('.user-profile-main-screen-name').innerHTML = result['data']['username'];
-                document.querySelector('.user-profile-main-item').innerHTML = 'Earned ' + result['data']['likes_earn'] + ' likes';
-                document.querySelector('#following > span:nth-child(2)').innerHTML = result['data']['following_num'];
-                document.querySelector('#follower > span:nth-child(2)').innerHTML = result['data']['follower_num'];
-                document.querySelector('.user-profile .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
-                document.querySelector('.site-header-right .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
-                username = document.querySelector('.user-profile-main-screen-name').innerHTML;
-                useravatar = result['data']['avatar_url'];
-                like_post_id = result['data']['like_post_id']
-                $.ajax({
-                    url: '/posts/' + username,
-                    type: 'GET',
-                    data: '',
-                    success: function (result) {
-                        posts_update(result)
-                    }
-                })
+           document.querySelector('.site-header-right .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
+        }
+    })
+});
+$(document).ready(function () {
+    username = document.querySelector('.user-profile-main-screen-name').innerHTML;
+    $("#post").attr("href", "/" + username + "/post");
+    $("#following").attr("href", "/" + username + "/following");
+    $("#follower").attr("href", "/" + username + "/follower");
+    $.ajax({
+        url: '/users/' + username,
+        type: 'GET',
+        data: '',
+        success: function (result) {
+            $('#avatar').css('background-image', `url(${result['data']['avatar_url']})`);
+            document.querySelector('.user-profile-main-item').innerHTML = 'Earned ' + result['data']['likes_earn'] + ' likes';
+            document.querySelector('#followings > span:nth-child(2)').innerHTML = result['data']['following_num'];
+            document.querySelector('#followers > span:nth-child(2)').innerHTML = result['data']['follower_num'];
+            like_post_id = result['data']['like_post_id']
+            useravatar = result['data']['avatar_url'];
+            if(result['is_following'] === false){
+                document.querySelector('.user-profile-operation-subscribe-primary').innerHTML = "Unfollowing";
+                document.querySelector('.user-profile-operation-subscribe-danger').innerHTML = "Following";
+            }else if(result['is_following'] === true){
+                document.querySelector('.user-profile-operation-subscribe-primary').innerHTML = "Following";
+                document.querySelector('.user-profile-operation-subscribe-danger').innerHTML = "Unfollowing";
             }
+        }
+    })
+    $.ajax({
+        url: '/posts/' + username,
+        type: 'GET',
+        data: '',
+        success: function (result) {
+            posts_update(result)
+        }
     })
 
 });
-
 
 function posts_update(result) {
     for (var i in result['data']) {
@@ -50,14 +67,9 @@ function posts_update(result) {
                             </div>
                             <div class="user-activity-header-main">
                                 <h1 class="user-name">
-                                    <a href="" id="id_username">${username}</a>
+                                    <a href="/${username}/post" id="id_username">${username}</a>
                                 </h1>
                                 <p class="post-time"><span>${date}</span></p>
-                            </div>
-                            <div class="user-activity-header-right">
-                                <svg class="symbol dropdown-trigger trash">
-                                    <use xlink:href="#symbol-trash"></use>
-                                </svg>
                             </div>
                         </div>
                         <div class="user-activity-body">
@@ -103,29 +115,13 @@ function posts_update(result) {
     });
 }
 
-
-$(document).on('click', '.trash', function () {
-    var post_id = $(this).parents('.user-activity-container')[0].id;
-    var element = $(this).parents('.user-activity-container');
-    var data = new URLSearchParams();
-    data.append('post_id', post_id);
-    $.ajax({
-        url: 'posts/delete',
-        type: 'POST',
-        data: data.toString(),
-        success: function (result) {
-            element.remove();
-        }
-    })
-});
-
 $(document).on('click', '.like', function () {
     var post_id = $(this).parents('.user-activity-container')[0].id;
     var element = $(this).parent().parent();
     var data = new URLSearchParams();
     data.append('post_id', post_id);
     $.ajax({
-        url: 'like',
+        url: '/like',
         type: 'POST',
         data: data.toString(),
         success: function (result) {

@@ -6,8 +6,6 @@
     <title>weibo</title>
     <link href="../static/css/style.css" rel="stylesheet">
     <link href="../static/css/profile.css" rel="stylesheet">
-    <script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="../static/js/profile.js"></script>
 </head>
 
 <body class="page page-spa">
@@ -153,8 +151,7 @@
                                     <a class="header-item hidden-xs" href="/">Home</a>
                                     <div class="user-info header-item dropdown-trigger">
                                         <div class="user-avatar ">
-                                            <div class="user-avatar-content"
-                                                 style="background-image: url(&quot;../static/image/avatar.png&quot;);"></div>
+                                            <div class="user-avatar-content"></div>
                                         </div>
                                     </div>
                                     <a href="/logout">
@@ -173,20 +170,20 @@
                     <div class="row  user-root center-xs">
                         <div class="col  user-left hidden-sm hidden-xs">
                             <div>
-                                    <div class="affix" style="width: 250px;">
+                                <div class="affix" style="width: 250px;">
                                         <div class="user-profile">
                                             <div class="user-profile-background" style="background-image: url(&quot;../static/image/bg.png&quot;);"></div>
                                             <div class="user-profile-thumbnailUrl">
                                                 <div class="user-avatar ">
-                                                    <div class="user-avatar-content" style="background-image: url(&quot;../static/image/otherAvatar.png&quot;);"></div>
+                                                    <div class="user-avatar-content" id="avatar"></div>
                                                 </div>
                                             </div>
                                             <div class="user-profile-main">
-                                                <div class="user-profile-main-screen-name">莫尔索</div>
+                                                <div class="user-profile-main-screen-name">{{ username }}</div>
                                                 <div class="user-profile-main-stats user-profile-main-item">
                                                     <svg class="symbol symbol-dig user-profile-main-stats-icon">
                                                         <use xlink:href="#symbol-dig"></use>
-                                                    </svg>Earned 10 likes
+                                                    </svg>
                                                 </div>
                                                 <div class="user-profile-main-brief">stay hungry，stay foolish</div>
                                                 <div class="user-profile-operation">
@@ -202,18 +199,18 @@
                                         <div>
                                             <ul class="menu menu-vertical user-nav-collection menu-light menu-root" role="menu" aria-activedescendant="" tabindex="0">
                                                 <li class="menu-item" role="menuitem" aria-selected="false">
-                                                    <a target=""href="/post"  >
-                                                        <div class="is-flex between-xs"><span>TA'S ACTIVITY</span><span></span></div>
+                                                    <a target=""  id="post">
+                                                        <div class="is-flex between-xs"><span>ACTIVITY</span><span></span></div>
                                                     </a>
                                                 </li>
                                                 <li class="menu-item" role="menuitem" aria-selected="false">
-                                                    <a target=""href="/following" class="is-active">
-                                                        <div class="is-flex between-xs"><span>TA'S FOLLOWING</span><span>10</span></div>
+                                                    <a target="" class="is-active" id="following">
+                                                        <div class="is-flex between-xs" id="followings"><span>FOLLOWING</span><span></span></div>
                                                     </a>
                                                 </li>
-                                                <li class="menu-item" role="menuitem" aria-selected="false">
-                                                    <a target=""href="/follower">
-                                                        <div class="is-flex between-xs"><span>TA'S FLLOWER</span><span>56</span></div>
+                                                <li class="menu-item" role="menuitem" aria-selected="false" >
+                                                    <a target="" id="follower">
+                                                        <div class="is-flex between-xs" id="followers"><span>FLLOWER</span><span></span></div>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -353,6 +350,9 @@
             </div>
         </div>
     </div>
+    <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <script src="../static/js/csrf.js"></script>
+    <script src="../static/js/otherFollow.js"></script>
 </body>
 
 </html>
