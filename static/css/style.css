@@ -7047,22 +7047,7 @@ body {
     opacity: 1
 }
 
-.pswp__button, .pswp__button--arrow--left:before, .pswp__button--arrow--right:before {
-    background: url(https://cdn.ruguoapp.com/jike-web/static/images/default-skin.e3f799c.png) 0 0 no-repeat;
-    background-size: 264px 88px;
-    width: 44px;
-    height: 44px
-}
 
-@media (-webkit-min-device-pixel-ratio: 1.1),(-webkit-min-device-pixel-ratio: 1.09375),(min-resolution: 1.1dppx),(min-resolution: 105dpi) {
-    .pswp--svg .pswp__button, .pswp--svg .pswp__button--arrow--left:before, .pswp--svg .pswp__button--arrow--right:before {
-        background-image: url(https://cdn.ruguoapp.com/jike-web/static/images/default-skin.b257fa9.svg)
-    }
-
-    .pswp--svg .pswp__button--arrow--left, .pswp--svg .pswp__button--arrow--right {
-        background: none
-    }
-}
 
 .pswp__button--close {
     background-position: 0 -44px
@@ -8608,13 +8593,6 @@ div.comments-timeline-empty-tip {
     padding: 47px 0
 }
 
-.login-modal-right-title {
-    width: 377px;
-    height: 19px;
-    background: url(https://cdn.ruguoapp.com/jike-web/static/images/download.b497d01.png) 50% no-repeat;
-    background-size: cover;
-    margin: 0 auto
-}
 
 .login-modal-right-qrcode {
     margin: 40px 0
@@ -8992,11 +8970,6 @@ div.comments-timeline-empty-tip {
     margin-bottom: 0
 }
 
-.user-avatar {
-    position: relative;
-    background-image: url(https://cdn.ruguoapp.com/jike-web/static/images/anony.4726dd0.png);
-    background-size: 100%
-}
 
 .user-avatar-content {
     width: 100%;
@@ -9847,15 +9820,6 @@ div.comments-timeline-empty-tip {
     justify-content: flex-start
 }
 
-.search-wrap-hot-icon {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin-left: 5px;
-    background-image: url(https://cdn.ruguoapp.com/jike-web/static/images/hot.9986a91.png);
-    background-size: cover;
-    vertical-align: sub
-}
 
 .search-wrap-normal {
     font-size: 14px;
@@ -9939,14 +9903,6 @@ div.comments-timeline-empty-tip {
     cursor: pointer
 }
 
-.search-words-hot-icon {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin-left: 5px;
-    background-image: url(https://cdn.ruguoapp.com/jike-web/static/images/hot.9986a91.png);
-    background-size: cover
-}
 
 .search-words-normal {
     padding: 8px 0;

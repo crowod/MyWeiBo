@@ -33,7 +33,7 @@
                 $('.message-feed .message-card-container').each(function () {
                     $(this).remove();
                 });
-                post_id = result['post_id'];
+                post_id = result['posts_id'];
                 posts_update(result);
             }
         })
@@ -41,11 +41,12 @@
 
     function posts_update(result)
 // language=HTML
-        // language=HTML
-        {
+    // language=HTML
+    {
         for (var i in result['data']) {
             var date = new Date(result['data'][i]['datetime']);
-            date = date.getFullYear() + '/' + date.getMonth() + '/' + date.getDay();
+            date = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + " " +
+                date.getHours() + ":" + date.getMinutes();
             $('.message-feed').append(
                 $(
                     `<div class="message-card-container" id=${result['data'][i]['id']}>

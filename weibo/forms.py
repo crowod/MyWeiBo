@@ -36,7 +36,7 @@ class RegisterForm(forms.Form):
     username_sign_up = forms.CharField(required=True,
                                        validators=[
                                            RegexValidator(
-                                               regex=r'^[a-z0-9_-]*$',
+                                               regex=r'^[a-z0-9_-]+$',
                                                message='username has illegal characters.',
                                                code='invalid_username'
                                            ),

@@ -59,7 +59,7 @@ function follower_update(result) {
         )
     }
     $('.user-card.is-small').each(function () {
-        $('.user-avatar-content').css('background-image', 'url(' + result['data'][i]['avatar_url'] + ') ');
+        $(this).find('.user-avatar-content').css('background-image', 'url(' + result['data'][i]['avatar_url'] + ') ');
     });
 }
 
