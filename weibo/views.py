@@ -35,6 +35,8 @@ def post_view(request):
 
 def otherPost_view(request, username):
     if request.user.is_authenticated:
+        if request.user.username == username:
+            return redirect('/post')
         return render(request, 'othersPost.html', {'username': username})
     else:
         return render(request, 'home.html')
@@ -327,7 +329,7 @@ class FollowerList(generics.ListAPIView):
         if request.user.username:
             for item in result:
                 is_following = FollowShip.objects.filter(follower__username=request.user.username,
-                                                         following_username=item.get('username')).exists()
+                                                         following__username=item.get('username')).exists()
                 item.update({'is_following': is_following})
             return Response({
                 'data': result
@@ -354,7 +356,7 @@ class FollowingList(generics.ListAPIView):
         if request.user.username:
             for item in result:
                 is_following = FollowShip.objects.filter(follower__username=request.user.username,
-                                                         following_username=item.get('username')).exists()
+                                                         following__username=item.get('username')).exists()
                 item.update({'is_following': is_following})
             return Response({
                 'data': result
@@ -398,7 +400,7 @@ class FollowingCancel(generics.CreateAPIView):
         following_name = request.data['following_name']
         user = User.objects.get(username=username)
         following = User.objects.get(username=following_name)
-        FollowShip.objects.get(follower=user, following=following).delete()
+        FollowShip.objects.filter(follower=user, following=following).delete()
         return Response(
             status=status.HTTP_201_CREATED
         )
