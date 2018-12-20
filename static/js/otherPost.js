@@ -133,3 +133,30 @@ $(document).on('click', '.like', function () {
         }
     })
 });
+
+$(document).on('click', '.user-profile-operation-subscribe', function () {
+    var data = new URLSearchParams();
+    data.append('following_name', username);
+    if(document.querySelector('.user-profile-operation-subscribe-primary').innerHTML === "Unfollowing"){
+        $.ajax({
+            url: '/following/add',
+            type: 'POST',
+            data: data.toString(),
+            success: function (result) {
+                document.querySelector('.user-profile-operation-subscribe-primary').innerHTML = "Following";
+                document.querySelector('.user-profile-operation-subscribe-danger').innerHTML = "Unfollowing";
+            }
+        })
+    }else if(document.querySelector('.user-profile-operation-subscribe-primary').innerHTML === "Following"){
+        $.ajax({
+            url: '/following/cancel',
+            type: 'POST',
+            data: data.toString(),
+            success: function (result) {
+                document.querySelector('.user-profile-operation-subscribe-primary').innerHTML = "Unfollowing";
+                document.querySelector('.user-profile-operation-subscribe-danger').innerHTML = "Following";
+            }
+        })
+    }
+
+});
