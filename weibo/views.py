@@ -1,4 +1,5 @@
 from django.contrib import auth
+from django.contrib.auth import update_session_auth_hash
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.shortcuts import render, redirect
@@ -105,7 +106,8 @@ def landing_view(request, status=0):
                                   {
                                       'lf': lf,
                                       'rf': rf,
-                                      'error': "password is invalid."
+                                      'error': "password is invalid.",
+                                      'status': status
                                   })
             else:
                 rf = RegisterForm()
@@ -138,8 +140,8 @@ def profile_view(request):
                                                             "status": 1})
                 else:
                     user.set_password(password)
+                    update_session_auth_hash(request, user)
                     user.save()
-                    auth.login(request, user)
                 return render(request, "profile.html", {"profile_form": profile_form,
                                                         "success_msg": "Update successfully!",
                                                         "user": user,
@@ -247,6 +249,8 @@ class PostAdd(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         content = request.data['content']
+        if content.strip() == '':
+            return Response(status=status.HTTP_404_NOT_FOUND)
         datetime = timezone.now()
         user = User.objects.get(username=request.user.username)
         post = Post.objects.create(content=content, datetime=datetime)

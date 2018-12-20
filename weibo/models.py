@@ -69,7 +69,7 @@ class Comment(models.Model):
 
 
 class Post(models.Model):
-    content = models.CharField(max_length=300, blank=False)
+    content = models.CharField(max_length=300, null=False)
     datetime = models.DateTimeField(auto_now_add=True)
     comment = models.ManyToManyField(Comment)
     user = models.ManyToManyField(User)

@@ -5,10 +5,13 @@ function check_code() {
     var color1 = document.getElementById("id_email");
     //校验其格式(\w字母或数字或下划线)
     var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+    var reg_1 = /[A-Z]+/;
     if (code === "") {
         color1.style.border = "1px solid grey";
         return false;
     } else if (reg.test(code)) {
+        if(reg_1.test(code))
+            return false;
         //通过，增加ok样式
         color1.style.border = "1px solid green";
         return true;
@@ -38,7 +41,7 @@ function check_pwd1() {
 function check_username() {
     var code2 = document.getElementById("id_username").value;
     var color2 = document.getElementById("id_username");
-    var reg2 = /^[a-z0-9_-]*$/;
+    var reg2 = /^[a-z0-9_-]+$/;
     if (code2 === "") {
         color2.style.border = "1px solid grey";
         return false;
