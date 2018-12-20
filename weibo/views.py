@@ -205,7 +205,7 @@ class UserProfile(generics.ListAPIView):
         if request.user.username:
             is_following = FollowShip.objects.filter(follower__username=request.user.username,
                                                      following__username=kwargs['username']).exists()
-            queryset = Like.objects.filter(user__username=username).filter(is_like=True)
+            queryset = Like.objects.filter(user__username=request.user.username).filter(is_like=True)
             like_post_id = list(map(lambda x: x.post_id, queryset))
             result = dict()
             result.update(serializer.data)
