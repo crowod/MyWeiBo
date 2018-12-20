@@ -4,13 +4,12 @@ from django.core.validators import validate_email
 from django.shortcuts import render, redirect
 # Create your views here.
 from django.utils import timezone
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from weibo.forms import LoginForm, RegisterForm, ProfileForm
-from weibo.models import User, Post, Like, FollowShip, Comment, Image
+from weibo.models import User, Post, Like, FollowShip, Comment
 from weibo.serializers import PostSerializer, LikeSerializer, UserSerializer, FollowShipSerializer, \
     CommentSerializer
 
@@ -325,6 +324,14 @@ class FollowerList(generics.ListAPIView):
         queryset = FollowShip.objects.filter(following__username=username)
         serializer = FollowShipSerializer(queryset, many=True)
         result = [x.get('follower_user') for x in serializer.data]
+        if request.user.username:
+            for item in result:
+                is_following = FollowShip.objects.filter(follower__username=request.user.username,
+                                                         following_username=item.get('username')).exists()
+                item.update({'is_following': is_following})
+            return Response({
+                'data': result
+            }, status=status.HTTP_200_OK)
         if serializer:
             return Response({
                 'data': result
@@ -344,6 +351,14 @@ class FollowingList(generics.ListAPIView):
         queryset = FollowShip.objects.filter(follower__username=username)
         serializer = FollowShipSerializer(queryset, many=True)
         result = [x.get('following_user') for x in serializer.data]
+        if request.user.username:
+            for item in result:
+                is_following = FollowShip.objects.filter(follower__username=request.user.username,
+                                                         following_username=item.get('username')).exists()
+                item.update({'is_following': is_following})
+            return Response({
+                'data': result
+            }, status=status.HTTP_200_OK)
         if serializer:
             return Response({
                 'data': result
