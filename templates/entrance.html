@@ -5,6 +5,7 @@
     <title>Weibo</title>
     <link rel="stylesheet" href="../static/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/css/entrance.css">
+    <link rel="stylesheet" href="../static/css/home.css" />
     <script src="../static/js/jquery-3.3.1.min.js"></script>
     <script src="../static/js/bootstrap.min.js"></script>
     <script>
@@ -26,11 +27,22 @@
         }, 2000);
     </script>
 </head>
-<body>
-<div class="login-wrap">
+<body class="is-preload">
+<!-- Header -->
+<header id="header">
+				<div class="inner">
+					<a href="#" class="image avatar"><img src="../static/image/social-weibo.svg" alt="" /></a>
+					<h1><strong>Discover something new </strong><br />
+						anytime and anywhere!<br />
+						Share your insights with the world!</h1>
+				</div>
+			</header>
+
+<div id="main">
+    <div class="login-wrap">
     <div class="login-html">
-        <input id="tab-1" type="radio" name="tab" class="sign-in"><label for="tab-1" class="tab">Sign In</label>
-        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
+    <input id="tab-1" type="radio" name="tab" class="sign-in"><label for="tab-1" class="tab">Sign In</label>
+    <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
         <div class="login-form">
             {% load widget_tweaks %}
             <div class="sign-in-htm">
@@ -63,6 +75,7 @@
                         <label for="pass" class="label">Password</label>
                         {{ lf.password_sign_in|add_class:"input"|attr:"data-type:password,id:id_pwd" }}
                     </div>
+                    <p></p>
                     <div class="group">
                         <button type="submit" class="button" value="Sign In" >Sign In</button>
                     </div>
@@ -102,18 +115,19 @@
                         <label for="pass" class="label">Repeat Password</label>
                         {{ rf.password_cfm_sign_up|add_class:"input"|attr:"data-type:password"|attr:"id:id_pwd2" }}
                     </div>
+                    <p></p>
                     <div class="group">
                         <button type="submit" class="button" value="Sign Up" onclick="check_commit()">Sign Up</button>
-                    </div>
-                    <div class="hr"></div>
-                    <div class="foot-lnk">
-                        <label for="tab-1">Already Member?</label>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+</div>
+
+
+
 <script>
     $('#tab-1').on("click", function () {
         $('.sign-up-htm form input').each(function () {
@@ -126,6 +140,10 @@
         })
     })
 </script>
+<script src="../static/js/jquery.min.js"></script>
+<script src="../static/js/browser.min.js"></script>
+<script src="../static/js/breakpoints.min.js"></script>
+<script src="../static/js/home.js"></script>
 <script src="../static/js/entrance.js"></script>
 </body>
 </html>
