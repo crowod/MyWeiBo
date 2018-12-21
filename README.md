@@ -1,2 +1,9 @@
 # final_exam
-Web Final Exam
+Weibo web App
+——post
+——like
+——Unlike
+——delete
+——follow
+——Unfollow
+——update avatar
