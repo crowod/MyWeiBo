@@ -12,6 +12,7 @@ $(document).ready(function () {
                 document.querySelector('.user-profile .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
                 document.querySelector('.site-header-right .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
                 username = document.querySelector('.user-profile-main-screen-name').innerHTML;
+                $('#welcome')[0].innerHTML = 'Welcome ' + result['data']['username'] + '!';
                 $.ajax({
                     url: '/following/' + username,
                     type: 'GET',

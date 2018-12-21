@@ -7,6 +7,7 @@ $(document).ready(function () {
         success: function (result) {
            document.querySelector('.site-header-right .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
             mainUser = result['data']['username'];
+            $('#welcome')[0].innerText = 'Welcome ' + mainUser + "!"
         }
     })
 });

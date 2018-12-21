@@ -85,9 +85,6 @@
                     <a><svg class="symbol symbol-dig like">
                     <use xlink:href="#symbol-dig"></use></svg><p>${result['data'][i]['total_liked']}</p></a>
                     </div>
-                    <div class="op-item ">
-                    <a><svg class="symbol symbol-comment"><use xlink:href="#symbol-comment"></use></svg>0</a>
-                    </div>
                     </div>
                     </div>
                     </div>
@@ -124,6 +121,7 @@
                 document.querySelector('.site-header-right .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
                 post_id = result['data']['post_id'];
                 like_post_id = result['data']['like_post_id']
+                $('#welcome')[0].innerHTML = 'Welcome ' + result['data']['username'] + '!';
             }
         });
     }

@@ -14,6 +14,7 @@ $(document).ready(function () {
                 document.querySelector('.user-profile .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
                 document.querySelector('.site-header-right .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
                 username = document.querySelector('.user-profile-main-screen-name').innerHTML;
+                $('#welcome')[0].innerHTML = 'Welcome ' + result['data']['username'] + '!';
                 useravatar = result['data']['avatar_url'];
                 like_post_id = result['data']['like_post_id']
                 $.ajax({
@@ -79,13 +80,6 @@ function posts_update(result) {
                                             <use xlink:href="#symbol-dig"></use>
                                         </svg>
                                         <p>${result['data'][i]['total_liked']}</p>
-                                    </a>
-                                </div>
-                                <div class="op-item ">
-                                    <a>
-                                        <svg class="symbol symbol-comment">
-                                            <use xlink:href="#symbol-comment"></use>
-                                        </svg>
                                     </a>
                                 </div>
                             </div>

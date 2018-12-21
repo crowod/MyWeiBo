@@ -8,6 +8,7 @@ $(document).ready(function () {
         data: '',
         success: function (result) {
            document.querySelector('.site-header-right .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
+            $('#welcome')[0].innerText = 'Welcome ' + result['data']['username'] + "!"
         }
     })
 });
@@ -91,13 +92,6 @@ function posts_update(result) {
                                             <use xlink:href="#symbol-dig"></use>
                                         </svg>
                                         <p>${result['data'][i]['total_liked']}</p>
-                                    </a>
-                                </div>
-                                <div class="op-item ">
-                                    <a>
-                                        <svg class="symbol symbol-comment">
-                                            <use xlink:href="#symbol-comment"></use>
-                                        </svg>
                                     </a>
                                 </div>
                             </div>

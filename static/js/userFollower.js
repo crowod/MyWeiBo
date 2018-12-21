@@ -11,7 +11,7 @@ $(document).ready(function () {
                 document.querySelector('#follower > span:nth-child(2)').innerHTML = result['data']['follower_num'];
                 document.querySelector('.user-profile .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
                 document.querySelector('.site-header-right .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
-
+                $('#welcome')[0].innerHTML = 'Welcome ' + result['data']['username'] + '!';
                 username = document.querySelector('.user-profile-main-screen-name').innerHTML;
                 $.ajax({
                     url: '/followers/' + username,
