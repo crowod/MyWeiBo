@@ -16,6 +16,7 @@ function update_me() {
             document.querySelector('#follower > span:nth-child(2)').innerHTML = result['data']['follower_num'];
             document.querySelector('.user-profile .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
             document.querySelector('.site-header-right .user-avatar-content').style.backgroundImage = `url(${result['data']['avatar_url']})`;
+            $('#welcome')[0].innerHTML = 'Welcome ' + result['data']['username'] + '!';
         }
     });
 }
@@ -57,9 +58,8 @@ function passwordValidation() {
         error_msg.style.display = "block";
         $('#error_msg').delay(2000).slideUp();
         event.preventDefault();
-    } else {
-        btn.submit();
     }
+
 }
 
 $(document).ready(function () {

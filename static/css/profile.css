@@ -152,6 +152,7 @@
 }
 
 #MyImage {
+    position:relative;
 }
 
 #penLayer {
