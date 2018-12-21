@@ -1,15 +1,17 @@
 # final_exam
-##Weibo web App
-###——post
 
-###——like
+Weibo web App
 
-###——Unlike
+——post
 
-###——delete
+——like
 
-###——follow
+——Unlike
 
-###——Unfollow
+——delete
 
-###——update avatar
+——follow
+
+——Unfollow
+
+——update avatar
